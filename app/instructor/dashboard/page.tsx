@@ -1,0 +1,57 @@
+"use client";
+import React, { useState } from "react";
+import Sidebar from "@/components/instructor/Sidebar";
+import Header from "@/components/instructor/Header";
+import Courses from "@/components/instructor/sections/Courses";
+import Assignments from "@/components/instructor/sections/Assignments";
+import Submissions from "@/components/instructor/sections/Submissions";
+import QuestionsForm from "@/components/examCreate/QuestionsForm";
+// import Grading from "@/components/instructor/sections/Grading";
+import { FaBook, FaClipboardList,FaBookOpen, FaInbox, FaGraduationCap,FaRegClipboard } from "react-icons/fa";
+import CourseBuilder from "@/components/instructor/sections/CourseBuilder";
+const navItems = [
+  { id: "courses", icon: FaBook, label: "Create Course" },
+  {
+    id: "all-courses",
+    icon: FaBookOpen,
+    label: "All Courses",
+  },
+  {
+    id: "create-test",
+    icon: FaRegClipboard,  // Or any relevant icon from react-icons
+    label: "Create Test",
+  },
+  { id: "assignments", icon: FaClipboardList, label: "Assignments" },
+  { id: "submissions", icon: FaInbox, label: "Submissions" },
+];
+const DashboardPage = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [activeSection, setActiveSection] = useState("courses");
+  const [darkMode, setDarkMode] = useState(false);
+
+  return (
+    <div className={`${darkMode ? "dark" : ""}`}>
+      <div className="flex">
+        <Sidebar
+          isOpen={isSidebarOpen}
+          active={activeSection}
+          setActive={setActiveSection}
+          toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+          navItems={navItems}
+        />
+        <div className="flex-1 h-screen flex flex-col">
+          <Header role={"Instructor"} />
+          <main className="p-4 overflow-auto flex-1">
+            {activeSection === "courses" && <CourseBuilder/>}
+            {activeSection === "create-test" && <QuestionsForm/>}
+            {activeSection === "assignments" && <Assignments />}
+            {activeSection === "submissions" && <Submissions />}
+            {/* {activeSection === "grading" && <Grading />} */}
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default DashboardPage;
