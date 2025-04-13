@@ -15,7 +15,7 @@ const StudentProfile = () => {
     email: user?.emailAddresses[0]?.emailAddress || 'student@email.com',
     phone: '+1 (555) 000-0000',
     dateOfBirth: '2000-01-01',
-    bio: 'Passionate learner pursuing knowledge in web development.',
+    bio: 'Passionate learner pursuing knowledge in web development. i want to learn all new technology',
   });
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
