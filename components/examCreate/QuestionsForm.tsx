@@ -489,7 +489,10 @@ if(!slug){
           questionText: q.text,
           options: q.options,
           correctAnswerIndex: q.correctOptionIndex,
-        }))}
+        })
+      
+      
+      )}
       />
     </div>
   );

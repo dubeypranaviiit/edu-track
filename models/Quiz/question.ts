@@ -20,7 +20,8 @@ const questionSchema = new Schema<QuestionDocument>(
     marks: { type: Number, default: 1 },
     negativeMarks: { type: Number, default: 0 },
     explanation: { type: String },
-    quiz: { type: mongoose.Schema.Types.ObjectId, ref: "Quiz"},
+    // quiz: { type: mongoose.Schema.Types.ObjectId, ref: "Quiz"},
+    quiz: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz' },
   },
   { timestamps: true }
 );

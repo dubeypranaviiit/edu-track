@@ -1,9 +1,7 @@
 'use client';
-
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
 import {
   FiEdit2,
   FiTrash2,
@@ -12,7 +10,6 @@ import {
 } from "react-icons/fi";
 import { BsQuestionCircle } from "react-icons/bs";
 import { IoTrophyOutline } from "react-icons/io5";
-
 type Test = {
   title: string;
   description: string;
@@ -85,7 +82,7 @@ const TestManagementDashboard = () => {
   };
 
   const handleEdit = (slug: string) => {
-    router.push(`/test/${slug}`);
+    router.push(`/edit-test/${slug}`);
   };
 
   const filteredTests = tests.filter((test) => {
@@ -150,7 +147,7 @@ const TestManagementDashboard = () => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4 text-gray-700">
               <div className="flex items-center gap-2">
                 <BsQuestionCircle className="text-blue-500" />
-                <span>{test.TotalQuestion} Questions</span>
+                <span>{test.TotalQuestion+1} Questions</span>
               </div>
               <div className="flex items-center gap-2">
                 <FiClock className="text-blue-500" />
