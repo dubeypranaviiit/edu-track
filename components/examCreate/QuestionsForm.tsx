@@ -274,6 +274,7 @@ export default function QuestionsForm() {
     title: '',
     slug: '',
     description: '',
+    TotalQuestion:0,
     duration: 30,
     totalMarks: 0,
     maxAttempts: 1,
@@ -388,7 +389,15 @@ if(!slug){
           onChange={(e) => setQuiz({ ...quiz, totalMarks: +e.target.value })}
         />
       </div>
-
+      <div>
+        <Label htmlFor="totalQ">Total Question</Label>
+        <Input
+          id="totalQ"
+          type="number"
+          value={quiz.TotalQuestion}
+          onChange={(e) => setQuiz({ ...quiz, TotalQuestion: +e.target.value })}
+        />
+      </div>
       <div>
         <Label htmlFor="duration">Duration (min)</Label>
         <Input

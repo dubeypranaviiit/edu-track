@@ -12,6 +12,7 @@ export interface QuizDocument extends Document {
   createdBy: String;
   isPublished: boolean;
   maxAttempts:Number;
+  TotalQuestion:Number;
 }
 
 const quizSchema = new Schema<QuizDocument>(
@@ -22,6 +23,7 @@ const quizSchema = new Schema<QuizDocument>(
     duration: { type: Number, required: true }, // minutes
     totalMarks: { type: Number, required: true },
     questions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Question" }],
+    TotalQuestion:{ type: Number, required: true },
     createdBy: {   type: String,required: true },
     isPublished: { type: Boolean, default: false },
     maxAttempts: { type: Number, default: 1 },

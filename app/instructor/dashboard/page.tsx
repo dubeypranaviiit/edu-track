@@ -7,20 +7,14 @@ import Assignments from "@/components/instructor/sections/Assignments";
 import Submissions from "@/components/instructor/sections/Submissions";
 import QuestionsForm from "@/components/examCreate/QuestionsForm";
 // import Grading from "@/components/instructor/sections/Grading";
-import { FaBook, FaClipboardList,FaBookOpen, FaInbox, FaGraduationCap,FaRegClipboard } from "react-icons/fa";
+import { FaBook, FaClipboardList,FaBookOpen, FaInbox, FaGraduationCap,FaRegClipboard, FaListUl, } from "react-icons/fa";
 import CourseBuilder from "@/components/instructor/sections/CourseBuilder";
+import TestManagementDashboard from "@/components/examCreate/TestManagementDashboard";
 const navItems = [
   { id: "courses", icon: FaBook, label: "Create Course" },
-  {
-    id: "all-courses",
-    icon: FaBookOpen,
-    label: "All Courses",
-  },
-  {
-    id: "create-test",
-    icon: FaRegClipboard,  // Or any relevant icon from react-icons
-    label: "Create Test",
-  },
+  { id: "all-courses", icon: FaBookOpen, label: "All Courses" },
+  { id: "create-test", icon: FaRegClipboard, label: "Create Test" },
+  { id: "all-tests", icon: FaListUl, label: "All Tests" }, // ✅ Added
   { id: "assignments", icon: FaClipboardList, label: "Assignments" },
   { id: "submissions", icon: FaInbox, label: "Submissions" },
 ];
@@ -46,6 +40,7 @@ const DashboardPage = () => {
             {activeSection === "create-test" && <QuestionsForm/>}
             {activeSection === "assignments" && <Assignments />}
             {activeSection === "submissions" && <Submissions />}
+            {activeSection === "all-tests" && <TestManagementDashboard/>}
             {/* {activeSection === "grading" && <Grading />} */}
           </main>
         </div>

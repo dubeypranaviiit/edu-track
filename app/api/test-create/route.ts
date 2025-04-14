@@ -11,6 +11,7 @@ const quizSchema = z.object({
   slug: z.string().min(1, "Slug is required"),
   description: z.string().optional(),
   duration: z.number().positive("Duration must be a positive number"),
+  TotalQuestion: z.number().positive("Total qn must be a positive number"),
   totalMarks: z.number().nonnegative("Total marks must be non-negative"),
   // questions: z.array(z.string().length(24, "Invalid question ID")),
   questions: z.array(z.string().length(24, "Invalid question ID")).optional().default([]),
@@ -44,6 +45,7 @@ export async function POST(req: NextRequest) {
       description,
       duration,
       totalMarks,
+      TotalQuestion,
       questions = [],
       maxAttempts,
       isPublished,
@@ -85,6 +87,7 @@ export async function POST(req: NextRequest) {
       duration,
       totalMarks,
       questions,
+      TotalQuestion,
       createdBy: userId,
       isPublished,
       maxAttempts,
@@ -144,5 +147,16 @@ export async function PUT(req: NextRequest) {
   } catch (error) {
     console.error("Error updating quiz with questions:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
+}
+export async function GET(req: NextRequest) {
+  try {
+    await connectDB();
+    const quizzes = await Quiz.find({}).select('title slug description isPublished TotalQuestion totalMarks duration maxAttempts');
+    console.log(quizzes);
+    return NextResponse.json({ quizzes });
+  } catch (error) {
+    console.error('Error fetching quizzes:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
