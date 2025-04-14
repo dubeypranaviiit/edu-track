@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import VideoPlayer from './VideoPlayer';
-
+import { Course } from "@/types/course";
 export interface Subtopic {
   id: string;
   title: string;

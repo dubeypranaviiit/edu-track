@@ -36,7 +36,6 @@ export async function PATCH(
     );
   }
 }
-
 export async function DELETE(
     req: NextRequest,
   { params }: { params: { slug: string } }
@@ -70,4 +69,4 @@ export async function DELETE(
         { status: 500 }
       );
     }
-  }
+}
