@@ -7,7 +7,7 @@ import { Types } from 'mongoose'
 
 import { uploadToCloudinary } from '@/lib/cloudinaryUpload'
 import { connectDB } from '@/lib/mongoose'
-import Course from '@/models/course'
+import Course from '@/models/Course/course'
 
 // Save file temporarily
 async function saveTempFile(file: File): Promise<string> {
@@ -37,10 +37,6 @@ export async function POST(req: NextRequest) {
     const certificate = formData.get('certificate') === 'true'
     const features = JSON.parse(formData.get('features') as string)
 
-    // Validate instructor ObjectId
-  
-
-    // Extract files
     const thumbnailFile = formData.get('thumbnail') as File | null
     const logoFile = formData.get('logo') as File | null
 
@@ -50,8 +46,6 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       )
     }
-
-    // Upload to Cloudinary
     const tempThumbnailPath = await saveTempFile(thumbnailFile)
     const thumbnailUrl = await uploadToCloudinary(tempThumbnailPath, 'courses/thumbnails');
     console.log(thumbnailUrl);

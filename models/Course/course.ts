@@ -23,7 +23,7 @@ const CourseSchema = new Schema(
     features: [String],
     certificate: { type: Boolean, default: false },
     dateAdded: { type: Date, default: Date.now },
-    chapters: [{ type: Schema.Types.ObjectId, ref: "Chapter" }], // Array of Chapter ObjectIds
+    chapters: [{ type: Schema.Types.ObjectId, ref: "Chapter" }], 
     reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
     totalEnrollments: { type: Number, default: 0 },
   },

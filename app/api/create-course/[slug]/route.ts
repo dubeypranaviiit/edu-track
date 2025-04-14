@@ -1,7 +1,7 @@
 import { connectDB } from "@/lib/mongoose";
-import Course from "@/models/course";
-import Chapter from "@/models/chapter";
-import Subtopic from "@/models/subTopic";
+import Course from "@/models/Course/course";
+import Chapter from "@/models/Course/chapter";
+import Subtopic from "@/models/Course/subTopic";
 import { NextRequest, NextResponse } from "next/server";
 
 // Utility function to calculate the final price
