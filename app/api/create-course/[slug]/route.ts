@@ -79,9 +79,10 @@ export async function PUT(req: NextRequest,context: { params: { slug: string } }
 
   try {
     await connectDB()
-    
+    console.log(slug);
     // Find the course by slug
     const course = await Course.findOne({ slug })
+    console.log(course);
     if (!course) {
       return NextResponse.json({ message: 'Course not found' }, { status: 404 })
     }
@@ -89,7 +90,7 @@ export async function PUT(req: NextRequest,context: { params: { slug: string } }
   
     course.title = title || course.title
     course.description = description || course.description
-    course.thumbnail = thumbnail || course.thumbnail
+    // course.thumbnail = thumbnail || course.thumbnail
     course.logo = logo || course.logo
     course.originalPrice = originalPrice || course.originalPrice
     course.discountPercent = discountPercent || course.discountPercent

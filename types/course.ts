@@ -52,4 +52,10 @@ export interface Course {
   title: string;
   progress: number;
   chapters: Chapter[];
+  description:string,
+  category:string,
+  level: string,
+  originalPrice:number,
+  discountPercent:number,
+  duration:string,
 }

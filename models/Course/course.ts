@@ -5,7 +5,7 @@ const CourseSchema = new Schema(
     title: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
     description: String,
-    thumbnail: {type:String,required:true} ,// New field for course image
+    thumbnail: {type:String} ,// New field for course image
     logo: String, // New field for course logo
     originalPrice: { type: Number, required: true },
     discountPercent: { type: Number, default: 0 },
