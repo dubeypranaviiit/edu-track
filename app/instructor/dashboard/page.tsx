@@ -10,6 +10,7 @@ import QuestionsForm from "@/components/examCreate/QuestionsForm";
 import { FaBook, FaClipboardList,FaBookOpen, FaInbox, FaGraduationCap,FaRegClipboard, FaListUl, } from "react-icons/fa";
 import CourseBuilder from "@/components/instructor/sections/CourseBuilder";
 import TestManagementDashboard from "@/components/examCreate/TestManagementDashboard";
+import CourseManagementDashboard from "@/components/instructor/sections/CourseManagementCard";
 const navItems = [
   { id: "courses", icon: FaBook, label: "Create Course" },
   { id: "all-courses", icon: FaBookOpen, label: "All Courses" },
@@ -41,6 +42,7 @@ const DashboardPage = () => {
             {activeSection === "assignments" && <Assignments />}
             {activeSection === "submissions" && <Submissions />}
             {activeSection === "all-tests" && <TestManagementDashboard/>}
+            {activeSection === "all-courses" && <CourseManagementDashboard/>}
             {/* {activeSection === "grading" && <Grading />} */}
           </main>
         </div>

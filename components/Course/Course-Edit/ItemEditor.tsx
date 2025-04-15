@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-// import { FileUpload } from '@/components/ui/file-upload'
 
 interface Item {
   _id: string
@@ -34,23 +33,40 @@ const ItemEditor = ({ subtopic, onUpdate }: Props) => {
   const [newItemContent, setNewItemContent] = useState('')
   const [videoUrl, setVideoUrl] = useState('')
   const [file, setFile] = useState<File | null>(null)
+  const [videoSourceType, setVideoSourceType] = useState<'url' | 'file' | ''>('')
 
   const handleAddItem = async () => {
-    if (!newItemTitle.trim() || !newItemContent.trim()) return alert('Title and content are required')
+    if (!newItemTitle.trim() || !newItemContent.trim()) {
+      alert('Title and content are required')
+      return
+    }
 
     const formData = new FormData()
     formData.append('title', newItemTitle)
     formData.append('type', newItemType)
     formData.append('content', newItemContent)
-    if (newItemType === 'video' && videoUrl) formData.append('videoUrl', videoUrl)
-    if (file) formData.append('file', file)
+
+    if (newItemType === 'video') {
+      if (videoSourceType === 'url' && videoUrl) {
+        formData.append('videoUrl', videoUrl)
+      }
+      if (videoSourceType === 'file' && file) {
+        formData.append('file', file)
+      }
+    }
+
+    if (newItemType === 'assignment' && file) {
+      formData.append('file', file)
+    }
 
     try {
-      await axios.post(`/api/subtopic/${subtopic._id}`, formData)
+     const subTopicId= subtopic._id;
+      await axios.post(`/api/create-item/${subTopicId}` ,formData)
       setNewItemTitle('')
       setNewItemContent('')
       setVideoUrl('')
       setFile(null)
+      setVideoSourceType('')
       onUpdate()
     } catch (err) {
       console.error(err)
@@ -66,27 +82,38 @@ const ItemEditor = ({ subtopic, onUpdate }: Props) => {
           <DialogTrigger asChild>
             <Button variant="outline">+ Add Item</Button>
           </DialogTrigger>
-          <DialogContent>
-            <h3 className="text-lg font-medium mb-2">Add New Item</h3>
-            <Label>Title</Label>
-            <Input
-              value={newItemTitle}
-              onChange={e => setNewItemTitle(e.target.value)}
-              placeholder="Enter item title"
-            />
-            <div className="mt-4">
+          <DialogContent className="space-y-4">
+            <h3 className="text-lg font-semibold">Add New Item</h3>
+
+            <div className="space-y-2">
+              <Label>Title</Label>
+              <Input
+                value={newItemTitle}
+                onChange={e => setNewItemTitle(e.target.value)}
+                placeholder="Enter item title"
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label>Type</Label>
               <select
                 value={newItemType}
-                onChange={e => setNewItemType(e.target.value as 'video' | 'reading' | 'assignment')}
-                className="w-full"
+                onChange={e => {
+                  const type = e.target.value as 'video' | 'reading' | 'assignment'
+                  setNewItemType(type)
+                  setVideoSourceType('')
+                  setVideoUrl('')
+                  setFile(null)
+                }}
+                className="w-full border px-3 py-2 rounded-md"
               >
                 <option value="video">Video</option>
                 <option value="reading">Reading</option>
                 <option value="assignment">Assignment</option>
               </select>
             </div>
-            <div className="mt-4">
+
+            <div className="space-y-2">
               <Label>Content</Label>
               <Textarea
                 value={newItemContent}
@@ -94,52 +121,109 @@ const ItemEditor = ({ subtopic, onUpdate }: Props) => {
                 placeholder="Enter item content"
               />
             </div>
+
+            {/* VIDEO TYPE INPUTS */}
             {newItemType === 'video' && (
-              <div className="mt-4">
-                <Label>Video URL</Label>
+              <>
+                <div className="space-y-2">
+                  <Label>Video Source</Label>
+                  <select
+                    value={videoSourceType}
+                    onChange={e => {
+                      setVideoSourceType(e.target.value as 'url' | 'file')
+                      setVideoUrl('')
+                      setFile(null)
+                    }}
+                    className="w-full border px-3 py-2 rounded-md"
+                  >
+                    <option value="">Select source</option>
+                    <option value="url">Video URL</option>
+                    <option value="file">Upload File</option>
+                  </select>
+                </div>
+
+                {videoSourceType === 'url' && (
+                  <div className="space-y-2">
+                    <Label>Video URL</Label>
+                    <Input
+                      type="url"
+                      value={videoUrl}
+                      onChange={e => setVideoUrl(e.target.value)}
+                      placeholder="https://youtube.com/..."
+                    />
+                  </div>
+                )}
+
+                {videoSourceType === 'file' && (
+                  <div className="space-y-2">
+                    <Label>Upload Video File</Label>
+                    <Input
+                      type="file"
+                      accept="video/*"
+                      onChange={e => {
+                        if (e.target.files?.[0]) {
+                          setFile(e.target.files[0])
+                        }
+                      }}
+                    />
+                  </div>
+                )}
+              </>
+            )}
+
+            {/* ASSIGNMENT TYPE FILE UPLOAD */}
+            {newItemType === 'assignment' && (
+              <div className="space-y-2">
+                <Label>Upload Assignment File</Label>
                 <Input
-                  value={videoUrl}
-                  onChange={e => setVideoUrl(e.target.value)}
-                  placeholder="Enter video URL (if applicable)"
+                  type="file"
+                  onChange={e => {
+                    if (e.target.files?.[0]) {
+                      setFile(e.target.files[0])
+                    }
+                  }}
                 />
               </div>
             )}
-        {newItemType === 'assignment' && (
-  <div className="mt-4">
-    <input
-      type="file"
-      onChange={(e) => {
-        if (e.target.files && e.target.files[0]) {
-          setFile(e.target.files[0])
-        }
-      }}
-      className="block w-full text-sm text-gray-500
-                 file:mr-4 file:py-2 file:px-4
-                 file:rounded-md file:border-0
-                 file:text-sm file:font-semibold
-                 file:bg-blue-50 file:text-blue-700
-                 hover:file:bg-blue-100"
-    />
-  </div>
-)}
-            <div className="text-right mt-4">
+
+            <div className="text-right">
               <Button onClick={handleAddItem}>Save</Button>
             </div>
           </DialogContent>
         </Dialog>
       </div>
 
-      {subtopic.items.length === 0 && <p>No items added yet.</p>}
-
-      <div className="space-y-2">
-        {subtopic.items.map(item => (
-          <div key={item._id} className="border rounded-xl p-4 bg-gray-50">
-            <h4 className="font-medium text-lg">{item.title}</h4>
-            <p>{item.content}</p>
-            {item.type === 'video' && <p>Video URL: {item.videoUrl}</p>}
-            {item.type === 'assignment' && <p>Assignment File: {item.videoUrl}</p>}
-          </div>
-        ))}
+      <div className="space-y-4">
+        {subtopic.items.length === 0 ? (
+          <p className="text-gray-500 italic">No items added yet.</p>
+        ) : (
+          subtopic.items.map(item => (
+            <div key={item._id} className="border rounded-xl p-4 bg-gray-50">
+              <h4 className="font-medium text-lg">{item.title}</h4>
+              <p className="text-sm text-gray-700 mt-1">{item.content}</p>
+              {item.type === 'video' && item.videoUrl && (
+                <a
+                  href={item.videoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 text-sm mt-2 block"
+                >
+                  Watch Video
+                </a>
+              )}
+              {item.type === 'assignment' && item.videoUrl && (
+                <a
+                  href={item.videoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 text-sm mt-2 block"
+                >
+                  Download Assignment
+                </a>
+              )}
+            </div>
+          ))
+        )}
       </div>
     </div>
   )

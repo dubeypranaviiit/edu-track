@@ -1944,9 +1944,22 @@ export default function CourseBuilder() {
       }
 
       // Use axios to post FormData.
-      const res = await axios.post('/api/courses', formData)
+      const res = await axios.post('/api/create-course', formData)
 
       alert('🎉 Course successfully created!')
+      courseData.title= '',
+      courseData.slug= '',
+      courseData.description='',
+      courseData.originalPrice= '',
+      courseData.discountPercent= '',
+      courseData.instructor= '',
+      courseData.category= '',
+      courseData.duration='',
+      courseData.level='beginner',
+      courseData.features= '',
+      courseData.certificate= false,
+      setThumbnailFile(null),
+      setLogoFile(null)
       console.log(res.data)
     } catch (err: any) {
       console.error('Error:', err.response?.data || err.message)

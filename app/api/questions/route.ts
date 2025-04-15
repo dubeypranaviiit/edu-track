@@ -84,7 +84,6 @@ export async function POST(req: NextRequest) {
       options,
       correctOptionIndex,
       marks,
-     
       quiz: quizId,
     
     });

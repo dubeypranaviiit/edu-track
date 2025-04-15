@@ -6,10 +6,11 @@ import cloudinary from "@/lib/cloudinary";
 import { NextRequest, NextResponse } from "next/server";
 import Item from '@/models/Course/item'; 
 import { uploadToCloudinary } from "@/lib/cloudinaryUpload";
-export async function POST(req: NextRequest, context: { params: { subtopicId: string } }) {
-  const { subtopicId } = await context.params;
- console.log(`SuB topic id`,subtopicId);
+export async function POST(req: NextRequest, context: { params: {subTopicId: string } }) {
+  const {subTopicId} = await context.params;
+ console.log(`SuB topic id`,subTopicId);
   try {
+    
     const formData = await req.formData();
     const title = formData.get("title") as string;
     const type = formData.get("type") as "video" | "reading" | "assignment";
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest, context: { params: { subtopicId: st
 
     await connectDB();
 
-    const subtopic = await Subtopic.findById(subtopicId);
+    const subtopic = await Subtopic.findById(subTopicId);
     if (!subtopic) {
       console.log(`Sub topic nahimila yaha`);
       return NextResponse.json({ message: "Subtopic not found" }, { status: 404 });

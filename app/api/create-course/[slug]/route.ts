@@ -108,3 +108,37 @@ export async function PUT(req: NextRequest,context: { params: { slug: string } }
     return NextResponse.json({ message: 'Failed to update course metadata' }, { status: 500 })
   }
 }
+export async function PATCH(
+  request: Request,
+  { params }: { params: { slug: string } }
+) {
+  try {
+    await connectDB();
+
+    const { slug } = await params;
+    const body = await request.json();
+    const { isPublished } = body;
+
+    const updatedCourse = await Course.findOneAndUpdate(
+      { slug },
+      { isPublished },
+      { new: true }
+    );
+
+    if (!updatedCourse) {
+        console.log(`Course  not found in this code`);
+      return NextResponse.json({ message: "Course not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      message: "Publish status updated",
+      isPublished: updatedCourse.isPublished,
+    });
+  } catch (error) {
+    console.error("Error updating Course:", error);
+    return NextResponse.json(
+      { message: "Server error" },
+      { status: 500 }
+    );
+  }
+}
