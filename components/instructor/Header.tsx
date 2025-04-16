@@ -4,7 +4,7 @@ import { FaSun, FaMoon, FaBell } from "react-icons/fa";
 
 type HeaderProps = {
  role:string;
-  toggleDarkMode: () => void;
+  
 };
 
 const Header: React.FC<HeaderProps> = ({ role}) => {
