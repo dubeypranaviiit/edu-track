@@ -194,7 +194,7 @@ import axios from "axios";
 import Header from "@/components/Home/Header";
 import Footer from "@/components/Home/Footer";
 import CourseDetail from "@/components/Course/CourseDetail";
-
+import { useParams } from "next/navigation";
 interface Params {
   params: {
     slug: string;
@@ -206,12 +206,13 @@ export default function CoursePage({ params }: Params) {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const slug = decodeURIComponent(params.slug.trim());
+  const { slug } = useParams();
 
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await axios.get(`/api/courses/${slug}`);
+        
+        const response = await axios.get(`/api/create-course/${slug}`);
         if (response.data?.course) {
           setCourse(response.data.course);
         } else {

@@ -177,16 +177,16 @@ const CourseDetail = ({ course }: Props) => {
             <span>({course.reviews} reviews)</span>
           </div>
           <div className="flex items-center space-x-4">
-            <Image
-              src={course.instructor.image}
+            {/* <Image
+              src={course.instructor.logo}
               alt={course.instructor.name}
               width={64}
               height={64}
               className="rounded-full object-cover"
-            />
+            /> */}
             <div>
-              <h3 className="text-xl font-semibold">{course.instructor.name}</h3>
-              <p className="text-gray-300">{course.instructor.role}</p>
+              {/* <h3 className="text-xl font-semibold">{course.instructor.name}</h3>
+              <p className="text-gray-300">{course.instructor.role}</p> */}
             </div>
           </div>
         </div>
