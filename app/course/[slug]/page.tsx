@@ -214,7 +214,8 @@ export default function CoursePage({ params }: Params) {
         
         const response = await axios.get(`/api/create-course/${slug}`);
         if (response.data?.course) {
-          setCourse(response.data.course);
+          console.log(response.data.course._doc);
+          setCourse(response.data.course._doc);
         } else {
           setError("Course not found.");
         }

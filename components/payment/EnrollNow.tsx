@@ -8,7 +8,7 @@ const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
 
-export default function CheckoutButton() {
+export default function EnrollNow() {
   const [loading, setLoading] = useState(false);
 
   const handleCheckout = async () => {
