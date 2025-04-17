@@ -327,6 +327,11 @@ const CourseDetail = (
   //     priority
   //   />
   // )}
+  const finalPrice =
+  course.discountPercent > 0
+    ? course.originalPrice - (course.originalPrice * course.discountPercent) / 100
+    : course.originalPrice;
+
   return (
     <div className="min-h-screen bg-gray-900 text-white">
       {/* Hero */}
@@ -440,10 +445,10 @@ const CourseDetail = (
         {/* Sidebar */}
         <aside className="lg:sticky top-4 h-fit bg-gray-800 p-6 rounded-lg">
           <div className="text-3xl font-bold mb-6">
-            ${course.finalPrice}
+            ${finalPrice}
           </div>
           <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg mb-6">
-            Enroll Now
+          <EnrollNow />
           </button>
                {/* <EnrollNow /> */}
           <div className="space-y-3">
