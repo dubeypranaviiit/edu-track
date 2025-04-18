@@ -1,18 +1,300 @@
+// // // "use client";
+// // // import { useAuth, SignInButton, SignUpButton, UserButton,useUser  } from "@clerk/nextjs";
+// // // // import { UserButton, useUser } from "@clerk/nextjs";
+// // // import React, { useState } from "react";
+// // // import Link from "next/link";
+// // // import { FiMenu, FiX } from "react-icons/fi";
+// // // import { motion } from "framer-motion";
+
+// // // const Header: React.FC = () => {
+// // //   const [menuOpen, setMenuOpen] = useState(false);
+// // //   const { isSignedIn } = useAuth();
+// // //   const { user } = useUser();
+// // //  const [isLoggedIn,setIsLoggedIn]=useState(false);
+// // //   // Get custom role from user.publicMetadata.role
+// // //   const role = user?.publicMetadata?.role;
+
+// // //   const renderLinks = () => {
+// // //     const links = [
+// // //       { href: "/", label: "Home" },
+// // //       { href: "/about", label: "About" },
+// // //       { href: "/course", label: "Course" },
+// // //       { href: "/contact", label: "Contact" },
+// // //     ];
+
+// // //     if (role === "admin") {
+// // //       links.push({ href: "/admin/dashboard", label: "Dashboard" });
+// // //       links.push({ href: "/admin/users", label: "Manage Users" });
+// // //     }
+
+// // //     if (role === "instructor") {
+// // //       links.push({ href: "/instructor/courses", label: "My Courses" });
+// // //       links.push({ href: "/instructor/create", label: "Create Course" });
+// // //     }
+
+// // //     if (role === "student") {
+// // //       links.push({ href: "/student/learning", label: "My Learning" });
+// // //       links.push({ href: "/courses", label: "Browse Courses" });
+// // //     }
+
+// // //     return links;
+// // //   };
+
+// // //   const links = renderLinks();
+
+// // //   return (
+// // //     <header className="bg-white shadow-sm relative z-50">
+// // //       <div className="container mx-auto px-4">
+// // //         <div className="flex items-center justify-between h-16">
+// // //           {/* Logo */}
+// // //           <Link href="/" className="flex items-center">
+// // //             <span className="ml-2 text-xl font-bold text-blue-600">EduTrack</span>
+// // //           </Link>
+
+// // //           {/* Desktop Nav */}
+// // //           <nav className="hidden md:flex items-center space-x-8">
+// // //             {links.map((link) => (
+// // //               <Link
+// // //                 key={link.href}
+// // //                 href={link.href}
+// // //                 className="text-gray-700 hover:text-blue-600 transition-colors"
+// // //               >
+// // //                 {link.label}
+// // //               </Link>
+// // //             ))}
+// // //             <UserButton />
+// // //           </nav>
+
+// // //           {/* Mobile Menu Button */}
+// // //           <button
+// // //             className="md:hidden text-gray-700 focus:outline-none"
+// // //             onClick={() => setMenuOpen(!menuOpen)}
+// // //           >
+// // //             {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+// // //           </button>
+// // //         </div>
+
+// // //         {/* Mobile Slide Menu */}
+// // //         <motion.nav
+// // //           initial={{ x: "100%" }}
+// // //           animate={{ x: menuOpen ? "0%" : "100%" }}
+// // //           exit={{ x: "100%" }}
+// // //           transition={{ duration: 0.2, ease: "easeInOut" }}
+// // //           className="fixed top-0 right-0 w-64 h-full bg-white shadow-lg p-6 space-y-4 md:hidden z-50"
+// // //         >
+// // //           <button
+// // //             className="absolute top-4 right-4 text-gray-700"
+// // //             onClick={() => setMenuOpen(false)}
+// // //           >
+// // //             <FiX size={24} />
+// // //           </button>
+
+// // //           {links.map((link) => (
+// // //             <Link
+// // //               key={link.href}
+// // //               href={link.href}
+// // //               className="block text-gray-700 hover:text-blue-600 transition-colors"
+// // //               onClick={() => setMenuOpen(false)}
+// // //             >
+// // //               {link.label}
+// // //             </Link>
+// // //           ))}
+
+// // //           {/* <UserButton /> */}
+// // //           {isSignedIn ? (
+// // //     <UserButton />
+// // //   ) : (
+// // //     <div className="space-y-2">
+// // //       <SignInButton mode="modal">
+// // //         <button className="w-full bg-blue-600 text-white py-2 rounded-lg">Login</button>
+// // //       </SignInButton>
+// // //       <SignUpButton mode="modal">
+// // //         <button className="w-full border border-blue-600 text-blue-600 py-2 rounded-lg">Sign Up</button>
+// // //       </SignUpButton>
+// // //     </div>
+// // //   )}
+// // //         </motion.nav>
+// // //       </div>
+// // //     </header>
+// // //   );
+// // // };
+
+// // // export default Header;
+// // "use client";
+
+// // import {
+// //   SignInButton,
+// //   SignUpButton,
+// //   UserButton,
+// //   useAuth,
+// //   useUser,
+// // } from "@clerk/nextjs";
+// // import React, { useState } from "react";
+// // import Link from "next/link";
+// // import { FiMenu, FiX } from "react-icons/fi";
+// // import { motion } from "framer-motion";
+
+// // const Header: React.FC = () => {
+// //   const [menuOpen, setMenuOpen] = useState(false);
+// //   const { isSignedIn } = useAuth();
+// //   const { user } = useUser();
+
+// //   const role = user?.publicMetadata?.role ?? "student"; // default to student
+
+// //   const renderLinks = () => {
+// //     const links = [
+// //       { href: "/", label: "Home" },
+// //       { href: "/about", label: "About" },
+// //       { href: "/course", label: "Course" },
+// //       { href: "/contact", label: "Contact" },
+// //       { href: "/test", label: "Test" },
+
+// //     ];
+
+// //     if (role === "admin") {
+// //       links.push({ href: "/admin/dashboard", label: "Dashboard" });
+// //       links.push({ href: "/admin/users", label: "Manage Users" });
+// //     }
+
+// //     if (role === "instructor") {
+// //       links.push({ href: "/instructor/dashboard", label: "Dashboard" });
+      
+// //     }
+
+// //     if (role === "student") {
+// //       links.push({ href: "/dashboard", label: "Dashboard" });
+      
+// //     }
+
+// //     return links;
+// //   };
+
+// //   const links = renderLinks();
+
+// //   return (
+// //     <header className="bg-white shadow-sm relative z-50">
+// //       <div className="container mx-auto px-4">
+// //         <div className="flex items-center justify-between h-16">
+// //           {/* Logo */}
+// //           <Link href="/" className="flex items-center">
+// //             <span className="ml-2 text-xl font-bold text-blue-600">
+// //               EduTrack
+// //             </span>
+// //           </Link>
+
+// //           {/* Desktop Nav */}
+// //           <nav className="hidden md:flex items-center space-x-8">
+// //             {links.map((link) => (
+// //               <Link
+// //                 key={link.href}
+// //                 href={link.href}
+// //                 className="text-gray-700 hover:text-blue-600 transition-colors"
+// //               >
+// //                 {link.label}
+// //               </Link>
+// //             ))}
+// //             {isSignedIn ? (
+// //               <UserButton afterSignOutUrl="/" />
+// //             ) : (
+// //               <div className="flex gap-4">
+// //                 <SignInButton mode="modal">
+// //                   <button className="bg-blue-600 text-white px-4 py-2 rounded-lg">
+// //                     Login
+// //                   </button>
+// //                 </SignInButton>
+// //                 <SignUpButton mode="modal">
+// //                   <button className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg">
+// //                     Sign Up
+// //                   </button>
+// //                 </SignUpButton>
+// //               </div>
+// //             )}
+// //           </nav>
+
+// //           {/* Mobile Menu Toggle */}
+// //           <button
+// //             className="md:hidden text-gray-700 focus:outline-none"
+// //             onClick={() => setMenuOpen(!menuOpen)}
+// //           >
+// //             {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+// //           </button>
+// //         </div>
+
+// //         {/* Mobile Slide Menu */}
+// //         <motion.nav
+// //           initial={{ x: "100%" }}
+// //           animate={{ x: menuOpen ? "0%" : "100%" }}
+// //           exit={{ x: "100%" }}
+// //           transition={{ duration: 0.2, ease: "easeInOut" }}
+// //           className="fixed top-0 right-0 w-64 h-full bg-white shadow-lg p-6 space-y-4 md:hidden z-50"
+// //         >
+// //           <button
+// //             className="absolute top-4 right-4 text-gray-700"
+// //             onClick={() => setMenuOpen(false)}
+// //           >
+// //             <FiX size={24} />
+// //           </button>
+
+// //           {links.map((link) => (
+// //             <Link
+// //               key={link.href}
+// //               href={link.href}
+// //               className="block text-gray-700 hover:text-blue-600 transition-colors"
+// //               onClick={() => setMenuOpen(false)}
+// //             >
+// //               {link.label}
+// //             </Link>
+// //           ))}
+
+// //           {isSignedIn ? (
+// //             <UserButton />
+// //           ) : (
+// //             <div className="space-y-2">
+// //               <SignInButton mode="modal">
+// //                 <button className="w-full bg-blue-600 text-white py-2 rounded-lg">
+// //                   Login
+// //                 </button>
+// //               </SignInButton>
+// //               <SignUpButton mode="modal">
+// //                 <button className="w-full border border-blue-600 text-blue-600 py-2 rounded-lg">
+// //                   Sign Up
+// //                 </button>
+// //               </SignUpButton>
+// //             </div>
+// //           )}
+// //         </motion.nav>
+// //       </div>
+// //     </header>
+// //   );
+// // };
+
+// // export default Header;
 // "use client";
-// import { useAuth, SignInButton, SignUpButton, UserButton,useUser  } from "@clerk/nextjs";
-// // import { UserButton, useUser } from "@clerk/nextjs";
+
+// import {
+//   SignInButton,
+//   SignUpButton,
+//   UserButton,
+//   useAuth,
+//   useUser,
+// } from "@clerk/nextjs";
 // import React, { useState } from "react";
 // import Link from "next/link";
 // import { FiMenu, FiX } from "react-icons/fi";
 // import { motion } from "framer-motion";
+// import {
+//   DropdownMenu,
+//   DropdownMenuContent,
+//   DropdownMenuItem,
+//   DropdownMenuTrigger,
+// } from "@/components/ui/dropdown-menu";
 
 // const Header: React.FC = () => {
 //   const [menuOpen, setMenuOpen] = useState(false);
 //   const { isSignedIn } = useAuth();
 //   const { user } = useUser();
-//  const [isLoggedIn,setIsLoggedIn]=useState(false);
-//   // Get custom role from user.publicMetadata.role
-//   const role = user?.publicMetadata?.role;
+
+//   const role = user?.publicMetadata?.role ?? "student"; // default to student
 
 //   const renderLinks = () => {
 //     const links = [
@@ -20,6 +302,7 @@
 //       { href: "/about", label: "About" },
 //       { href: "/course", label: "Course" },
 //       { href: "/contact", label: "Contact" },
+//       { href: "/test", label: "Test" }, // Will handle this differently below
 //     ];
 
 //     if (role === "admin") {
@@ -28,13 +311,11 @@
 //     }
 
 //     if (role === "instructor") {
-//       links.push({ href: "/instructor/courses", label: "My Courses" });
-//       links.push({ href: "/instructor/create", label: "Create Course" });
+//       links.push({ href: "/instructor/dashboard", label: "Dashboard" });
 //     }
 
 //     if (role === "student") {
-//       links.push({ href: "/student/learning", label: "My Learning" });
-//       links.push({ href: "/courses", label: "Browse Courses" });
+//       links.push({ href: "/dashboard", label: "Dashboard" });
 //     }
 
 //     return links;
@@ -48,24 +329,64 @@
 //         <div className="flex items-center justify-between h-16">
 //           {/* Logo */}
 //           <Link href="/" className="flex items-center">
-//             <span className="ml-2 text-xl font-bold text-blue-600">EduTrack</span>
+//             <span className="ml-2 text-xl font-bold text-blue-600">
+//               EduTrack
+//             </span>
 //           </Link>
 
 //           {/* Desktop Nav */}
 //           <nav className="hidden md:flex items-center space-x-8">
-//             {links.map((link) => (
-//               <Link
-//                 key={link.href}
-//                 href={link.href}
-//                 className="text-gray-700 hover:text-blue-600 transition-colors"
-//               >
-//                 {link.label}
-//               </Link>
-//             ))}
-//             <UserButton />
+//             {links.map((link) => {
+//               if (link.label === "Test") {
+//                 return (
+//                   <DropdownMenu key={link.label}>
+//                     <DropdownMenuTrigger asChild>
+//                       <Link href='/test' className="text-gray-700 hover:text-blue-600 transition-colors">
+//                         Test
+//                       </Link>
+//                     </DropdownMenuTrigger>
+//                     <DropdownMenuContent className="mt-2">
+//                       <DropdownMenuItem asChild>
+//                         <Link href="/test/free">Free Tests</Link>
+//                       </DropdownMenuItem>
+//                       <DropdownMenuItem asChild>
+//                         <Link href="/test/premium">Premium Tests</Link>
+//                       </DropdownMenuItem>
+//                     </DropdownMenuContent>
+//                   </DropdownMenu>
+//                 );
+//               }
+
+//               return (
+//                 <Link
+//                   key={link.href}
+//                   href={link.href}
+//                   className="text-gray-700 hover:text-blue-600 transition-colors"
+//                 >
+//                   {link.label}
+//                 </Link>
+//               );
+//             })}
+
+//             {isSignedIn ? (
+//               <UserButton afterSignOutUrl="/" />
+//             ) : (
+//               <div className="flex gap-4">
+//                 <SignInButton mode="modal">
+//                   <button className="bg-blue-600 text-white px-4 py-2 rounded-lg">
+//                     Login
+//                   </button>
+//                 </SignInButton>
+//                 <SignUpButton mode="modal">
+//                   <button className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg">
+//                     Sign Up
+//                   </button>
+//                 </SignUpButton>
+//               </div>
+//             )}
 //           </nav>
 
-//           {/* Mobile Menu Button */}
+//           {/* Mobile Menu Toggle */}
 //           <button
 //             className="md:hidden text-gray-700 focus:outline-none"
 //             onClick={() => setMenuOpen(!menuOpen)}
@@ -89,30 +410,57 @@
 //             <FiX size={24} />
 //           </button>
 
-//           {links.map((link) => (
-//             <Link
-//               key={link.href}
-//               href={link.href}
-//               className="block text-gray-700 hover:text-blue-600 transition-colors"
-//               onClick={() => setMenuOpen(false)}
-//             >
-//               {link.label}
-//             </Link>
-//           ))}
+//           {links.map((link) => {
+//             if (link.label === "Test") {
+//               return (
+//                 <div key={link.label} className="space-y-2">
+//                   <span className="block font-medium text-gray-700">Test</span>
+//                   <Link
+//                     href="/test/free"
+//                     className="block text-gray-600 ml-4 hover:text-blue-600"
+//                     onClick={() => setMenuOpen(false)}
+//                   >
+//                     Free Tests
+//                   </Link>
+//                   <Link
+//                     href="/test/premium"
+//                     className="block text-gray-600 ml-4 hover:text-blue-600"
+//                     onClick={() => setMenuOpen(false)}
+//                   >
+//                     Premium Tests
+//                   </Link>
+//                 </div>
+//               );
+//             }
 
-//           {/* <UserButton /> */}
+//             return (
+//               <Link
+//                 key={link.href}
+//                 href={link.href}
+//                 className="block text-gray-700 hover:text-blue-600 transition-colors"
+//                 onClick={() => setMenuOpen(false)}
+//               >
+//                 {link.label}
+//               </Link>
+//             );
+//           })}
+
 //           {isSignedIn ? (
-//     <UserButton />
-//   ) : (
-//     <div className="space-y-2">
-//       <SignInButton mode="modal">
-//         <button className="w-full bg-blue-600 text-white py-2 rounded-lg">Login</button>
-//       </SignInButton>
-//       <SignUpButton mode="modal">
-//         <button className="w-full border border-blue-600 text-blue-600 py-2 rounded-lg">Sign Up</button>
-//       </SignUpButton>
-//     </div>
-//   )}
+//             <UserButton />
+//           ) : (
+//             <div className="space-y-2">
+//               <SignInButton mode="modal">
+//                 <button className="w-full bg-blue-600 text-white py-2 rounded-lg">
+//                   Login
+//                 </button>
+//               </SignInButton>
+//               <SignUpButton mode="modal">
+//                 <button className="w-full border border-blue-600 text-blue-600 py-2 rounded-lg">
+//                   Sign Up
+//                 </button>
+//               </SignUpButton>
+//             </div>
+//           )}
 //         </motion.nav>
 //       </div>
 //     </header>
@@ -133,13 +481,20 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { FiMenu, FiX } from "react-icons/fi";
 import { motion } from "framer-motion";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false); // for hover
   const { isSignedIn } = useAuth();
   const { user } = useUser();
 
-  const role = user?.publicMetadata?.role ?? "student"; // default to student
+  const role = user?.publicMetadata?.role ?? "student";
 
   const renderLinks = () => {
     const links = [
@@ -147,8 +502,7 @@ const Header: React.FC = () => {
       { href: "/about", label: "About" },
       { href: "/course", label: "Course" },
       { href: "/contact", label: "Contact" },
-      { href: "/test", label: "Test" },
-
+      { href: "/test", label: "Test" }, // handled separately
     ];
 
     if (role === "admin") {
@@ -158,12 +512,10 @@ const Header: React.FC = () => {
 
     if (role === "instructor") {
       links.push({ href: "/instructor/dashboard", label: "Dashboard" });
-      
     }
 
     if (role === "student") {
       links.push({ href: "/dashboard", label: "Dashboard" });
-      
     }
 
     return links;
@@ -183,16 +535,45 @@ const Header: React.FC = () => {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center space-x-8">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-gray-700 hover:text-blue-600 transition-colors"
-              >
-                {link.label}
-              </Link>
-            ))}
+          <nav className="hidden md:flex items-center space-x-8 cursor-pointer">
+            {links.map((link) => {
+              if (link.label === "Test") {
+                return (
+                  <div
+                    key={link.label}
+                    onMouseEnter={() => setDropdownOpen(true)}
+                    onMouseLeave={() => setDropdownOpen(false)}
+                  >
+                    <DropdownMenu open={dropdownOpen}>
+                      <DropdownMenuTrigger asChild>
+                        <button className="text-gray-700 hover:text-blue-600 transition-colors">
+                          Test
+                        </button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="mt-2">
+                        <DropdownMenuItem asChild>
+                          <Link href="/test/free">Free Tests</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href="/test/premium">Premium Tests</Link>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                );
+              }
+
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-gray-700 hover:text-blue-600 transition-colors"
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+
             {isSignedIn ? (
               <UserButton afterSignOutUrl="/" />
             ) : (
@@ -235,23 +616,47 @@ const Header: React.FC = () => {
             <FiX size={24} />
           </button>
 
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="block text-gray-700 hover:text-blue-600 transition-colors"
-              onClick={() => setMenuOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {links.map((link) => {
+            if (link.label === "Test") {
+              return (
+                <div key={link.label} className="space-y-2 cursor-pointer">
+                  <span className="block font-medium text-gray-700">Test</span>
+                  <Link
+                    href="/test/free"
+                    className="block text-gray-600 ml-4 hover:text-blue-600"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Free Tests
+                  </Link>
+                  <Link
+                    href="/test/premium"
+                    className="block text-gray-600 ml-4 hover:text-blue-600"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Premium Tests
+                  </Link>
+                </div>
+              );
+            }
+
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="block text-gray-700 hover:text-blue-600 transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
 
           {isSignedIn ? (
             <UserButton />
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-2 cursor-pointer">
               <SignInButton mode="modal">
-                <button className="w-full bg-blue-600 text-white py-2 rounded-lg">
+                <button className="w-full bg-blue-600 text-white py-2 rounded-lg cursor-pointer">
                   Login
                 </button>
               </SignInButton>
