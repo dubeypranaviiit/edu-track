@@ -147,6 +147,8 @@ const Header: React.FC = () => {
       { href: "/about", label: "About" },
       { href: "/course", label: "Course" },
       { href: "/contact", label: "Contact" },
+      { href: "/test", label: "Test" },
+
     ];
 
     if (role === "admin") {
