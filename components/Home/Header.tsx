@@ -527,7 +527,7 @@ const Header: React.FC = () => {
     <header className="bg-white shadow-sm relative z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
+        
           <Link href="/" className="flex items-center">
             <span className="ml-2 text-xl font-bold text-blue-600">
               EduTrack
