@@ -7,7 +7,7 @@ const HeroSection: React.FC = () => {
         Learn Smarter. Achieve More.
       </h1>
       <p className="text-xl text-gray-500 mb-10 max-w-2xl mx-auto">
-        Explore expertly crafted courses designed to help you excel in your academic journey.
+        Explore expertly crafted courses designed to help you excel in your academic journey .
       </p>
       <Link href="/course" className="bg-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-700 transition duration-300 shadow-md hover:shadow-xl">
         Explore Courses
