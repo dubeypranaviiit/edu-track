@@ -1,17 +1,14 @@
-// components/About/Mission.tsx
-import { motion } from "framer-motion";
-
+import { motion } from "framer-motion"
 interface MissionProps {
   isVisible: boolean;
 }
-
 const Mission = ({ isVisible }: MissionProps) => (
   <motion.section
     id="mission"
     initial={{ opacity: 0 }}
     animate={isVisible ? { opacity: 1 } : { opacity: 0 }}
     transition={{ duration: 0.6 }}
-    className="py-20 bg-gradient-to-r from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 text-center"
+    className="py-20 bg-linear-to-r from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 text-center"
   >
     <div className="container mx-auto px-6">
       <h2 className="text-4xl font-bold mb-6 text-gray-900 dark:text-white">Our Mission</h2>

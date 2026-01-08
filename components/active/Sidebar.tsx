@@ -1,48 +1,6 @@
-// import SidebarItem from "./SidebarItem";
-// import { Chapter, Item } from "@/types/course";
+import { Chapter, Item } from "@/types/course";
 
-// interface SidebarProps {
-//   chapters: Chapter[];
-//   selectedItem: Item;
-//   onItemSelect: (item: Item) => void;
-//   isOpen: boolean;
-//   onToggle: () => void;
-// }
-
-// const Sidebar: React.FC<SidebarProps> = ({
-//   chapters,
-//   selectedItem,
-//   onItemSelect,
-//   isOpen,
-//   onToggle,
-// }) => {
-//   return (
-//     <aside className={`${isOpen ? "block" : "hidden"} md:block w-64 bg-white border-r shadow-md p-4 overflow-y-auto`}>
-//       <h2 className="text-xl font-semibold mb-4">Course Contents</h2>
-//       <div className="space-y-4">
-//         {chapters.map((chapter) => (
-//           <SidebarItem
-//             key={chapter.id}
-//             chapter={chapter}
-//             selectedItemId={selectedItem.id}
-//             onSelect={(videoUrl, itemId) => {
-//               const item = chapter.subtopics
-//                 .flatMap((s) => s.items)
-//                 .find((i) => i.id === itemId);
-//               if (item) onItemSelect(item);
-//             }}
-//           />
-//         ))}
-//       </div>
-//     </aside>
-//   );
-// };
-
-// export default Sidebar;
-import SidebarItem from "./SidebarItem";
-import { Chapter, Item,Course,Subtopic, } from "@/types/course";
-
-interface SidebarProps {
+interface Props {
   chapters: Chapter[];
   selectedItem: Item | null;
   onItemSelect: (item: Item) => void;
@@ -50,31 +8,34 @@ interface SidebarProps {
   onToggle: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({
-  chapters,
-  selectedItem,
-  onItemSelect,
-  isOpen,
-  onToggle,
-}) => {
+export default function Sidebar({ chapters, selectedItem, onItemSelect, isOpen, onToggle }: Props) {
   return (
-    <aside className={`${isOpen ? "block" : "hidden"} md:block w-64 bg-white border-r shadow-md p-4 overflow-y-auto`}>
-      <h2 className="text-xl font-semibold mb-4">Course Contents</h2>
-      <div className="space-y-4">
-        {chapters.map((chapter) => (
-          <SidebarItem
-            key={chapter._id}
-            chapter={chapter}
-            selectedItemId={selectedItem?.id || null}
-            onSelect={(itemId) => {
-              const item = chapter.subtopics.flatMap((s) => s.items).find((i) => i.id === itemId);
-              if (item) onItemSelect(item);
-            }}
-          />
-        ))}
-      </div>
+    <aside className={`w-64 bg-white border-r p-4 ${isOpen ? "block" : "hidden"} md:block`}>
+      <button onClick={onToggle} className="mb-4 md:hidden">Close</button>
+
+      {chapters?.map((chapter) => (
+        <div key={chapter._id} className="mb-4">
+          <h3 className="font-bold">{chapter.title}</h3>
+          {chapter.subtopics?.map((subtopic) => (
+            <div key={subtopic._id} className="ml-2">
+              <p className="text-sm text-gray-700 font-medium">{subtopic.title}</p>
+              {subtopic.items?.map((item) => (
+                <button
+                  key={item._id}
+                  onClick={() => onItemSelect(item)}
+                  className={`block text-left ml-4 text-sm py-1 ${
+                    selectedItem?._id === item._id
+                      ? "text-blue-600 font-semibold"
+                      : "text-gray-600"
+                  }`}
+                >
+                  • {item.title}
+                </button>
+              ))}
+            </div>
+          ))}
+        </div>
+      ))}
     </aside>
   );
-};
-
-export default Sidebar;
+}

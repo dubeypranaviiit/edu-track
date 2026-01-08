@@ -1,4 +1,3 @@
-// components/About/Features.tsx
 import { motion } from "framer-motion";
 
 interface Feature {
@@ -12,14 +11,11 @@ interface FeaturesProps {
 }
 
 const Features = ({ features }: FeaturesProps) => (
-  <section className="py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-500">
+  <section className="py-20 bg-linear-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-500">
     <div className="container mx-auto px-6">
-      {/* Gradient Heading */}
       <h2 className="text-4xl font-extrabold text-center mb-16 bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text dark:from-indigo-400 dark:to-purple-400">
         What Sets Us Apart
       </h2>
-
-      {/* Features Grid */}
       <div className="grid md:grid-cols-3 gap-8 gap-y-12">
         {features.map((feature, index) => (
           <motion.div

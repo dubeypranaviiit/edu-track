@@ -1,68 +1,66 @@
 import { connectDB } from "@/lib/mongoose";
-import Course from "@/models/Course/course";
-import Chapter from "@/models/Course/chapter";
 import Subtopic from "@/models/Course/subTopic";
-import cloudinary from "@/lib/cloudinary";
+import Item from "@/models/Course/item";
 import { NextRequest, NextResponse } from "next/server";
-import Item from '@/models/Course/item'; 
 import { uploadToCloudinary } from "@/lib/cloudinaryUpload";
-export async function POST(req: NextRequest, context: { params: {subTopicId: string } }) {
-  const {subTopicId} = await context.params;
- console.log(`SuB topic id`,subTopicId);
+
+export async function POST(req: NextRequest, context: any
+
+) {
+  const { subTopicId } = context.params;
+
   try {
-    
+    await connectDB();
+
     const formData = await req.formData();
     const title = formData.get("title") as string;
     const type = formData.get("type") as "video" | "reading" | "assignment";
     const content = formData.get("content") as string;
-    const videoUrlInput = formData.get("videoUrl") as string;
+    const uploadType = formData.get("uploadType") as "upload" | "url" | undefined;
+    const videoUrlInput = formData.get("videoUrl") as string | undefined;
     const file = formData.get("file") as File | null;
 
-    await connectDB();
-
+  
     const subtopic = await Subtopic.findById(subTopicId);
-    if (!subtopic) {
-      console.log(`Sub topic nahimila yaha`);
-      return NextResponse.json({ message: "Subtopic not found" }, { status: 404 });
-    }
+    if (!subtopic) return NextResponse.json({ message: "Subtopic not found" }, { status: 404 });
 
     let finalVideoUrl: string | undefined;
-    let assignmentUrl: string | undefined;
+    let resources: string[] = [];
 
     if (type === "video") {
-      if (videoUrlInput) {
+      if (uploadType === "url" && videoUrlInput) {
         finalVideoUrl = videoUrlInput;
-      } else if (file && file.size > 0) {
+      } else if (uploadType === "upload" && file) {
         const buffer = Buffer.from(await file.arrayBuffer());
         const base64 = `data:${file.type};base64,${buffer.toString("base64")}`;
         const uploadedUrl = await uploadToCloudinary(base64, "course-videos");
         if (uploadedUrl) finalVideoUrl = uploadedUrl;
       } else {
-        return NextResponse.json({ message: "Either video URL or file is required." }, { status: 400 });
+        return NextResponse.json({ message: "Video URL or file required." }, { status: 400 });
       }
     }
 
     if (type === "assignment") {
-      if (!file || file.size === 0) {
-        return NextResponse.json({ message: "Assignment file is required." }, { status: 400 });
-      }
-
+      if (!file) return NextResponse.json({ message: "Assignment file required." }, { status: 400 });
       const buffer = Buffer.from(await file.arrayBuffer());
       const base64 = `data:${file.type};base64,${buffer.toString("base64")}`;
       const uploadedUrl = await uploadToCloudinary(base64, "assignments");
-      if (uploadedUrl) assignmentUrl = uploadedUrl;
+      if (uploadedUrl) resources.push(uploadedUrl);
     }
+
 
     const newItem = new Item({
       title,
       type,
       content,
-      videoUrl: type === "video" ? finalVideoUrl : undefined,
-      resources: type === "assignment" && assignmentUrl ? [assignmentUrl] : [],
+      uploadType: type === "video" ? uploadType : "upload",
+      videoUrl: finalVideoUrl,
+      resources,
     });
 
     await newItem.save();
 
+   
     subtopic.items.push(newItem._id);
     await subtopic.save();
 
@@ -72,5 +70,3 @@ export async function POST(req: NextRequest, context: { params: {subTopicId: str
     return NextResponse.json({ message: "Failed to add item" }, { status: 500 });
   }
 }
-
-

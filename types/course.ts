@@ -1,38 +1,11 @@
-// // types/course.ts
-
-// export type Course = {
-//   id: string;
-//   title: string;
-//   progress: number;
-//   currentLesson: string;
-//   chapters: Chapter[];
-// };
-
-// export type Chapter = {
-//   id: string;
-//   title: string;
-//   type: "video" | "assignment";
-//   completed: boolean;
-//   subtopics: SubtopicGroup[];
-// };
-
-// export type SubtopicGroup = {
-//   id: string;
-//   title: string;
-//   items: Subtopic[];
-// };
-
-// export type Subtopic = {
-//   id: string;
-//   title: string;
-//   videoUrl:string;
-//   completed: boolean;
-// };
 export interface Item {
-  id: string;
+  _id: string;
   title: string;
-  videoUrl: string;
-  completed: boolean;
+  type: "video" | "reading" | "assignment";
+  uploadType?: "upload" | "url";
+  videoUrl?: string;
+  content?: string;
+  resources?: string[];
 }
 
 export interface Subtopic {
@@ -48,14 +21,21 @@ export interface Chapter {
 }
 
 export interface Course {
-  id: string;
+  _id: string;
   title: string;
-  progress: number;
+  slug: string;
+  description?: string;
+  thumbnail?: string;
+  logo?: string;
+  originalPrice: number;
+  discountPercent?: number;
+  finalPrice?: number;
+  isPublished: boolean;
+  duration: string;
+  certificate?: boolean;
+  level: "beginner" | "intermediate" | "advanced";
+  category?: string;
+  features?: string[];
+  instructor?: any;
   chapters: Chapter[];
-  description:string,
-  category:string,
-  level: string,
-  originalPrice:number,
-  discountPercent:number,
-  duration:string,
 }

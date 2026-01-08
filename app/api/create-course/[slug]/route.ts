@@ -11,7 +11,8 @@ const calculateFinalPrice = (originalPrice: number, discountPercent: number): nu
   return originalPrice;
 };
 
-export async function GET(req: NextRequest, context: { params: { slug: string } }) {
+export async function GET(req: NextRequest, context: any
+) {
 console.log(`Request aaya hai`);
   try {
     await connectDB();
@@ -56,7 +57,9 @@ console.log(`Request aaya hai`);
     );
   }
 }
-export async function DELETE(req: NextRequest, context: { params: { slug: string } }) {
+export async function DELETE(req: NextRequest, context: any
+ 
+) {
   try {
     await connectDB();
     const {slug}=await context.params
@@ -73,14 +76,16 @@ export async function DELETE(req: NextRequest, context: { params: { slug: string
   }
 }
 
-export async function PUT(req: NextRequest,context: { params: { slug: string } }) {
+export async function PUT(req: NextRequest,context: any
+
+) {
   const { slug } =await  context.params
   const { title, description, thumbnail, logo, originalPrice, discountPercent, category, level, duration, features, certificate } = await req.json()
 
   try {
     await connectDB()
     console.log(slug);
-    // Find the course by slug
+  
     const course = await Course.findOne({ slug })
     console.log(course);
     if (!course) {
@@ -90,7 +95,6 @@ export async function PUT(req: NextRequest,context: { params: { slug: string } }
   
     course.title = title || course.title
     course.description = description || course.description
-    // course.thumbnail = thumbnail || course.thumbnail
     course.logo = logo || course.logo
     course.originalPrice = originalPrice || course.originalPrice
     course.discountPercent = discountPercent || course.discountPercent
@@ -109,13 +113,13 @@ export async function PUT(req: NextRequest,context: { params: { slug: string } }
   }
 }
 export async function PATCH(
-  request: Request,
-  { params }: { params: { slug: string } }
+  request: Request,context: any
+  
 ) {
   try {
     await connectDB();
 
-    const { slug } = await params;
+    const { slug } = await context.params;
     const body = await request.json();
     const { isPublished } = body;
 

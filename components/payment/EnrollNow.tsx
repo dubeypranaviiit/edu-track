@@ -1,42 +1,49 @@
 "use client";
+import React from "react";
 
-import { useState } from "react";
-import { loadStripe } from "@stripe/stripe-js";
-import axios from "axios";
+interface Props {
+  course: any;
+  userId?: string;
+}
 
-const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
-);
+const EnrollNow = ({ course, userId }: Props) => {
+  const finalPrice =
+    course.discountPercent > 0
+      ? course.originalPrice - (course.originalPrice * course.discountPercent) / 100
+      : course.originalPrice;
 
-export default function EnrollNow() {
-  const [loading, setLoading] = useState(false);
+  const handleEnroll = async () => {
+    if (!userId) return alert("Please login to enroll");
 
-  const handleCheckout = async () => {
     try {
-      setLoading(true);
-
-      const response = await axios.post("/api/checkout", {
-        quantity: 1,
+      const res = await fetch("/api/payment/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          courseId: course._id,
+          userId,
+          amount: finalPrice,
+        }),
       });
 
-      const sessionId = response.data.id;
-
-      const stripe = await stripePromise;
-      await stripe?.redirectToCheckout({ sessionId });
-    } catch (error) {
-      console.error("Checkout Error:", error);
-    } finally {
-      setLoading(false);
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url; // redirect to Stripe checkout
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Payment initiation failed");
     }
   };
 
   return (
     <button
-      onClick={handleCheckout}
-      disabled={loading}
-      className="px-4 py-2 bg-blue-600 text-white rounded"
+      onClick={handleEnroll}
+      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition"
     >
-      {loading ? "Redirecting..." : "Buy Now"}
+      Enroll Now - ₹{finalPrice}
     </button>
   );
-}
+};
+
+export default EnrollNow;

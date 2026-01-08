@@ -1,35 +1,32 @@
 import { connectDB } from "@/lib/mongoose";
 import Course from "@/models/Course/course";
 import Chapter from "@/models/Course/chapter";
-import Subtopic from "@/models/Course/subTopic";
 import { NextRequest, NextResponse } from "next/server";
-import Item from '@/models/Course/item'; 
 
-export async function POST(req: NextRequest, context: { params: { slug: string } }) {
-  // const { slug } =await context.params;
-  const { title,courseId } = await req.json()
- console.log(`request chapter mein aaya hai`);
+export async function POST(req: NextRequest) {
   try {
-    await connectDB()
- console.log(`Chapter mein request aaya`);
-    // Find course by slug
-    const course = await Course.findOne({slug: courseId })
-    if (!course) {
-      return NextResponse.json({ message: 'Course not found' }, { status: 404 })
+    await connectDB();
+
+    const { title, courseId } = await req.json();
+
+    if (!title || !courseId) {
+      return NextResponse.json({ message: "Title and courseId required" }, { status: 400 });
     }
-    const newChapter = new Chapter({
-      title,
-      course: course._id,
-    })
-    await newChapter.save()
 
-    // Add chapter to course
-    course.chapters.push(newChapter._id)
-    await course.save()
+    const course = await Course.findOne({ slug: courseId });
+    if (!course) {
+      return NextResponse.json({ message: "Course not found" }, { status: 404 });
+    }
 
-    return NextResponse.json(newChapter, { status: 201 })
+    const newChapter = new Chapter({ title, course: course._id });
+    await newChapter.save();
+
+    course.chapters.push(newChapter._id);
+    await course.save();
+
+    return NextResponse.json({ success: true, chapter: newChapter }, { status: 201 });
   } catch (error) {
-    console.error(error)
-    return NextResponse.json({ message: 'Failed to add chapter' }, { status: 500 })
+    console.error(error);
+    return NextResponse.json({ message: "Failed to add chapter" }, { status: 500 });
   }
 }

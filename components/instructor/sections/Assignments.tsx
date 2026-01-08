@@ -1,249 +1,183 @@
 "use client";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+ // your store for courses
+import useInstructorId from "@/lib/hooks/useInstructorId"; // custom hook
+import { useCourseStore } from "@/store/useCourseStore";
+export default function AddAssignmentForm() {
+  const instructorId = useInstructorId(); // get logged-in instructor ID directly
 
-import React, { useState } from "react";
-import Image from "next/image";
+  const { courses, fetchCourses, loadingCourses } = useCourseStore();
 
-interface UploadedFile {
-  type: "file" | "text";
-  file?: File;
-  previewUrl?: string;
-  textContent?: string;
-  course: string;
-  topic: string;
-  subtopic?: string;
-}
+  const [formData, setFormData] = useState({
+    topic: "",
+    subtopic: "",
+    slug: "",
+    type: "text",
+    textContent: "",
+    file: null,
+    course: "",
+  });
 
-const Assignments = () => {
-  const [course, setCourse] = useState("");
-  const [topic, setTopic] = useState("");
-  const [subtopic, setSubtopic] = useState("");
-  const [assignmentType, setAssignmentType] = useState<"file" | "text">("file");
-  const [textAssignment, setTextAssignment] = useState("");
-  const [filePreview, setFilePreview] = useState<string | null>(null);
-  const [previewFile, setPreviewFile] = useState<File | null>(null);
-  const [uploadedAssignments, setUploadedAssignments] = useState<UploadedFile[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const handleFileChange = (files: FileList | null) => {
-    if (!files || files.length === 0) return;
-    const file = files[0];
-    const previewUrl = URL.createObjectURL(file);
-    setPreviewFile(file);
-    setFilePreview(previewUrl);
+  // Fetch courses for this instructor
+  useEffect(() => {
+    if (instructorId) fetchCourses(instructorId);
+  }, [instructorId, fetchCourses]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+
+    // Auto-find course ID if slug matches
+    if (name === "slug") {
+      const course = courses.find(c => c.slug === value);
+      if (course) setFormData(prev => ({ ...prev, course: course._id }));
+      else setFormData(prev => ({ ...prev, course: "" }));
+    }
   };
 
-  const handleUpload = () => {
-    if (!course || !topic) {
-      alert("Course and Topic are required");
-      return;
-    }
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({ ...prev, file: e.target.files?.[0] || null }));
+  };
 
-    if (assignmentType === "file") {
-      if (!previewFile || !filePreview) {
-        alert("Please select a file to upload.");
-        return;
-      }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!instructorId) return toast.error("Instructor not found!");
 
-      const newFile: UploadedFile = {
-        type: "file",
-        file: previewFile,
-        previewUrl: filePreview,
-        course,
-        topic,
-        subtopic,
-      };
+    setLoading(true);
+    try {
+      const data = new FormData();
+      data.append("slug", formData.slug);
+      data.append("topic", formData.topic);
+      data.append("subtopic", formData.subtopic);
+      data.append("type", formData.type);
+      data.append("course", formData.course);
+      data.append("instructor", instructorId); // sent as uploadedBy
+      if (formData.type === "text") data.append("textContent", formData.textContent);
+      if (formData.type === "file" && formData.file) data.append("file", formData.file);
 
-      setUploadedAssignments((prev) => [newFile, ...prev]);
-    } else {
-      if (!textAssignment.trim()) {
-        alert("Text content cannot be empty.");
-        return;
-      }
-
-      const newTextAssignment: UploadedFile = {
+      const res = await axios.post("/api/assignments", data);
+      toast.success("Assignment created successfully!");
+      setFormData({
+        topic: "",
+        subtopic: "",
+        slug: "",
         type: "text",
-        textContent: textAssignment.trim(),
-        course,
-        topic,
-        subtopic,
-      };
-
-      setUploadedAssignments((prev) => [newTextAssignment, ...prev]);
+        textContent: "",
+        file: null,
+        course: "",
+      });
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.response?.data?.error || "Failed to create assignment");
+    } finally {
+      setLoading(false);
     }
-
-    // Clear inputs
-    setCourse("");
-    setTopic("");
-    setSubtopic("");
-    setPreviewFile(null);
-    setFilePreview(null);
-    setTextAssignment("");
   };
+
+  if (loadingCourses) return <p>Loading courses...</p>;
 
   return (
-    <div className="p-4 bg-white dark:bg-gray-800 rounded shadow-md">
-      <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Upload Assignment</h2>
+    <div className="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-xl mt-8">
+      <h2 className="text-2xl font-bold mb-4">Create Assignment</h2>
 
-      {/* Input fields */}
-      <div className="grid gap-3 mb-4">
-        <input
-          type="text"
-          placeholder="Course Name"
-          value={course}
-          onChange={(e) => setCourse(e.target.value)}
-          className="w-full px-3 py-2 border rounded-md"
-          required
-        />
-        <input
-          type="text"
-          placeholder="Topic"
-          value={topic}
-          onChange={(e) => setTopic(e.target.value)}
-          className="w-full px-3 py-2 border rounded-md"
-          required
-        />
-        <input
-          type="text"
-          placeholder="Subtopic (optional)"
-          value={subtopic}
-          onChange={(e) => setSubtopic(e.target.value)}
-          className="w-full px-3 py-2 border rounded-md"
-        />
-
-        {/* Type toggle */}
-        <div className="flex items-center gap-4">
-          <label className="flex items-center gap-2">
-            <input
-              type="radio"
-              value="file"
-              checked={assignmentType === "file"}
-              onChange={() => setAssignmentType("file")}
-            />
-            <span className="text-sm text-gray-700 dark:text-white">File Assignment</span>
-          </label>
-
-          <label className="flex items-center gap-2">
-            <input
-              type="radio"
-              value="text"
-              checked={assignmentType === "text"}
-              onChange={() => setAssignmentType("text")}
-            />
-            <span className="text-sm text-gray-700 dark:text-white">Text Assignment</span>
-          </label>
-        </div>
-
-        {assignmentType === "file" ? (
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Topic */}
+        <div>
+          <label>Topic</label>
           <input
-            type="file"
-            accept="*/*"
-            onChange={(e) => handleFileChange(e.target.files)}
-            className="w-full"
+            type="text"
+            name="topic"
+            value={formData.topic}
+            onChange={handleChange}
+            placeholder="Enter assignment topic"
+            required
+            className="w-full border rounded p-2"
           />
-        ) : (
-          <textarea
-            value={textAssignment}
-            onChange={(e) => setTextAssignment(e.target.value)}
-            placeholder="Enter text-based assignment"
-            rows={5}
-            className="w-full px-3 py-2 border rounded-md"
+        </div>
+
+        {/* Subtopic */}
+        <div>
+          <label>Subtopic</label>
+          <input
+            type="text"
+            name="subtopic"
+            value={formData.subtopic}
+            onChange={handleChange}
+            placeholder="Enter subtopic (optional)"
+            className="w-full border rounded p-2"
           />
-        )}
-        <button
-          onClick={handleUpload}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
-        >
-          Upload
-        </button>
-      </div>
-
-      {/* Preview */}
-      {assignmentType === "file" && filePreview && (
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">Preview</h3>
-          {previewFile?.type.startsWith("image/") ? (
-            <Image
-              src={filePreview}
-              alt="Preview"
-              width={300}
-              height={200}
-              className="rounded-md object-cover"
-            />
-          ) : previewFile?.type === "application/pdf" ? (
-            <iframe
-              src={filePreview}
-              title="PDF Preview"
-              width="100%"
-              height="400"
-              className="border rounded-md"
-            />
-          ) : (
-            <p className="text-gray-600 dark:text-gray-300">Preview not available for this file type.</p>
-          )}
         </div>
-      )}
 
-      {assignmentType === "text" && textAssignment.trim() && (
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">Text Preview</h3>
-          <p className="bg-gray-100 dark:bg-gray-700 p-3 rounded-md text-gray-700 dark:text-gray-200">
-            {textAssignment}
-          </p>
+        {/* Slug */}
+        <div>
+          <label>Course Slug</label>
+          <input
+            type="text"
+            name="slug"
+            value={formData.slug}
+            onChange={handleChange}
+            placeholder="Enter course slug to auto-select course"
+            required
+            className="w-full border rounded p-2"
+          />
         </div>
-      )}
 
-      <hr className="border-dashed border-gray-400 my-6" />
+        {/* Type */}
+        <div>
+          <label>Type</label>
+          <select
+            name="type"
+            value={formData.type}
+            onChange={handleChange}
+            className="w-full border rounded p-2"
+          >
+            <option value="text">Text</option>
+            <option value="file">File</option>
+          </select>
+        </div>
 
-      {/* Uploaded Assignments */}
-      <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">Uploaded Assignments</h3>
-      <div className="space-y-4">
-        {uploadedAssignments.map((item, index) => (
-          <div key={index} className="p-4 bg-gray-50 dark:bg-gray-700 border rounded-md">
-            <p className="text-gray-800 dark:text-gray-100">
-              <strong>Course:</strong> {item.course}
-            </p>
-            <p className="text-gray-800 dark:text-gray-100">
-              <strong>Topic:</strong> {item.topic}
-            </p>
-            {item.subtopic && (
-              <p className="text-gray-800 dark:text-gray-100">
-                <strong>Subtopic:</strong> {item.subtopic}
-              </p>
-            )}
-
-            {item.type === "file" && (
-              <>
-                <p className="mt-2 text-gray-700 dark:text-gray-200">{item.file?.name}</p>
-                {item.file?.type.startsWith("image/") && item.previewUrl && (
-                  <Image
-                    src={item.previewUrl}
-                    alt="Uploaded"
-                    width={250}
-                    height={180}
-                    className="mt-2 rounded-md object-cover"
-                  />
-                )}
-                {item.file?.type === "application/pdf" && item.previewUrl && (
-                  <iframe
-                    src={item.previewUrl}
-                    title="Uploaded PDF"
-                    width="100%"
-                    height="300"
-                    className="mt-2 rounded-md border"
-                  />
-                )}
-              </>
-            )}
-
-            {item.type === "text" && (
-              <p className="mt-2 text-gray-700 dark:text-gray-200 whitespace-pre-wrap">
-                {item.textContent}
-              </p>
-            )}
+        {/* Text Content */}
+        {formData.type === "text" && (
+          <div>
+            <label>Text Content</label>
+            <textarea
+              name="textContent"
+              value={formData.textContent}
+              onChange={handleChange}
+              placeholder="Write your assignment content here"
+              className="w-full border rounded p-2"
+              rows={5}
+              required
+            />
           </div>
-        ))}
-      </div>
+        )}
+
+        {/* File Upload */}
+        {formData.type === "file" && (
+          <div>
+            <label>Upload File</label>
+            <input
+              type="file"
+              name="file"
+              onChange={handleFileChange}
+              required
+              className="w-full border rounded p-2"
+            />
+          </div>
+        )}
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+        >
+          {loading ? "Creating..." : "Create Assignment"}
+        </button>
+      </form>
     </div>
   );
-};
-
-export default Assignments;
+}

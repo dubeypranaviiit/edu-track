@@ -1,8 +1,7 @@
-// components/About/CTA.tsx
 import { motion } from "framer-motion";
 
 const CTA = () => (
-  <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-center">
+  <section className="py-20 bg-linear-to-r from-blue-600 to-purple-600 text-white text-center">
     <div className="container mx-auto px-6">
       <h2 className="text-4xl font-bold mb-8">Ready to Transform Education?</h2>
       <motion.button

@@ -1,65 +1,62 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { writeFile, unlink } from 'fs/promises'
-import path from 'path'
-import { tmpdir } from 'os'
-import { v4 as uuidv4 } from 'uuid'
-import { Types } from 'mongoose'
-
-import { uploadToCloudinary } from '@/lib/cloudinaryUpload'
-import { connectDB } from '@/lib/mongoose'
-import Course from '@/models/Course/course'
-
-// Save file temporarily
+import { NextRequest, NextResponse } from "next/server";
+import { writeFile, unlink } from "fs/promises";
+import path from "path";
+import { tmpdir } from "os";
+import { v4 as uuidv4 } from "uuid";
+import { connectDB } from "@/lib/mongoose";
+import Course from "@/models/Course/course";
+import { uploadToCloudinary } from "@/lib/cloudinaryUpload";
 async function saveTempFile(file: File): Promise<string> {
-  const buffer = Buffer.from(await file.arrayBuffer())
-  const filename = `${uuidv4()}-${file.name}`
-  const tempPath = path.join(tmpdir(), filename)
-  await writeFile(tempPath, buffer)
-  return tempPath
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const filename = `${uuidv4()}-${file.name}`;
+  const tempPath = path.join(tmpdir(), filename);
+  await writeFile(tempPath, buffer);
+  return tempPath;
 }
 
 export async function POST(req: NextRequest) {
-  await connectDB()
+  await connectDB();
 
   try {
-    const formData = await req.formData()
+    const formData = await req.formData();
+    const title = formData.get("title") as string;
+    const slug = formData.get("slug") as string;
+    const description = formData.get("description") as string;
+    const originalPrice = Number(formData.get("originalPrice"));
+    const discountPercent = Number(formData.get("discountPercent")) || 0;
+    const instructor = formData.get("instructor") as string;
+    const category = formData.get("category") as string;
+    const level = formData.get("level") as string;
+    const duration = formData.get("duration") as string;
+    const certificate = formData.get("certificate") === "true";
+    const featuresString = formData.get("features") as string;
+    const features =
+      featuresString && featuresString.trim() !== ""
+        ? featuresString.split(",").map(f => f.trim())
+        : [];
 
-    // Extract fields
-    const title = formData.get('title') as string
-    const slug = formData.get('slug') as string
-    const description = formData.get('description') as string
-    const originalPrice = Number(formData.get('originalPrice'))
-    const discountPercent = Number(formData.get('discountPercent'))
-    const instructor = formData.get('instructor') as string
-    const category = formData.get('category') as string
-    const level = formData.get('level') as string
-    const duration = formData.get('duration') as string
-    const certificate = formData.get('certificate') === 'true'
-    const features = JSON.parse(formData.get('features') as string)
+    const thumbnailFile = formData.get("thumbnail") as File | null;
+    const logoFile = formData.get("logo") as File | null;
+    let thumbnailUrl = "";
+    let logoUrl = "";
 
-    const thumbnailFile = formData.get('thumbnail') as File | null
-    const logoFile = formData.get('logo') as File | null
-
-    if (!thumbnailFile || !logoFile) {
-      return NextResponse.json(
-        { error: 'Thumbnail and logo are required' },
-        { status: 400 }
-      )
+    if (thumbnailFile) {
+      const tempThumbnail = await saveTempFile(thumbnailFile);
+      thumbnailUrl = await uploadToCloudinary(tempThumbnail, "courses/thumbnails");
+      await unlink(tempThumbnail);
     }
-    const tempThumbnailPath = await saveTempFile(thumbnailFile)
-    const thumbnailUrl = await uploadToCloudinary(tempThumbnailPath, 'courses/thumbnails');
-    console.log(thumbnailUrl);
-    await unlink(tempThumbnailPath)
 
-    const tempLogoPath = await saveTempFile(logoFile)
-    const logoUrl = await uploadToCloudinary(tempLogoPath, 'courses/logos')
-    await unlink(tempLogoPath)
-
-    // Create and save course
+    if (logoFile) {
+      const tempLogo = await saveTempFile(logoFile);
+      logoUrl = await uploadToCloudinary(tempLogo, "courses/logos");
+      await unlink(tempLogo);
+    }
     const newCourse = new Course({
       title,
       slug,
       description,
+      thumbnail: thumbnailUrl,
+      logo: logoUrl,
       originalPrice,
       discountPercent,
       instructor,
@@ -68,26 +65,26 @@ export async function POST(req: NextRequest) {
       duration,
       certificate,
       features,
-      thumbnail: thumbnailUrl,
-      logo: logoUrl,
-    })
+    });
 
-    await newCourse.save()
+    await newCourse.save();
 
     return NextResponse.json({
       success: true,
-      course: newCourse,
-    })
+      course: {
+        ...newCourse.toObject(),
+        finalPrice: newCourse.finalPrice,
+      },
+    });
   } catch (error: any) {
-    console.error('Upload error:', error)
+    console.error("Error creating course:", error);
     return NextResponse.json(
-      { error: error.message || 'Upload failed' },
+      { success: false, error: error.message || "Error creating course" },
       { status: 500 }
-    )
+    );
   }
 }
 
-// Function to calculate final price from original price and discount percentage
 const calculateFinalPrice = (originalPrice: number, discountPercent: number) => {
   return originalPrice - (originalPrice * discountPercent) / 100
 }
@@ -96,16 +93,15 @@ export async function GET(req: NextRequest) {
   await connectDB()
 
   try {
-    // Fetch all courses from the database
+  
     const courses = await Course.find().lean()
 
-    // Map through courses and calculate the finalPrice
     const updatedCourses = courses.map((course: any) => ({
       ...course,
       finalPrice: calculateFinalPrice(course.originalPrice, course.discountPercent),
     }))
 
-    // Return courses with finalPrice
+ 
     return NextResponse.json({
       success: true,
       courses: updatedCourses,
@@ -118,4 +114,3 @@ export async function GET(req: NextRequest) {
     )
   }
 }
-

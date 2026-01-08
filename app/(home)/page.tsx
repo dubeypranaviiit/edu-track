@@ -3,20 +3,15 @@ import HeroSection from "@/components/Home/HeroSection";
 import HowItWorks from "@/components/Home/Working";
 import WhyChooseUs from "@/components/Home/WhyChooseUs";
 import Testimonials from "@/components/Home/Testimonials";
-
-import Footer from "@/components/Home/Footer";
-import Header from "@/components/Home/Header";
-
+import OurCourse from "@/components/Home/OurCourse";
 const Home: React.FC = () => {
   return (
     <main className="min-h-screen bg-gray-100 ">
-      <Header />
       <HeroSection />
       <HowItWorks />
       <WhyChooseUs />
-      {/* <UploadSection /> */}
+      <OurCourse />
       <Testimonials />
-      <Footer />
     </main>
   );
 };

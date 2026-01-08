@@ -6,11 +6,9 @@ import Features from "@/components/About/Features";
 import Team from "@/components/About/Team";
 import CTA from "@/components/About/CTA";
 import { FiBook, FiTarget, FiUsers } from "react-icons/fi";
- import Footer from "@/components/Home/Footer";
 const page = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 100) setIsVisible(true);
@@ -59,15 +57,15 @@ const page = () => {
   ];
 
   return (
+ <div>
     <div className={`${isDarkMode ? "dark bg-gray-900 text-white" : "bg-white text-gray-800"}`}>
       <Hero />
       <Mission isVisible={isVisible} />
       <Features features={features} />
-  
       <Team members={teamMembers} />
       <CTA />
-     <Footer />
     </div>
+  </div>
   );
 };
 

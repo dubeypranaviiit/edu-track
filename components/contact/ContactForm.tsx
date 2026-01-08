@@ -1,8 +1,5 @@
-// components/ContactForm.tsx
-
 "use client";
 import { useState } from "react";
-
 const ContactForm = () => {
   const [form, setForm] = useState({
     name: "",
@@ -18,10 +15,27 @@ const ContactForm = () => {
     setForm({ ...form, [e.target.id]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Add form handling logic here (e.g., send to API or EmailJS)
-    console.log("Submitted Form:", form);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(data.message);
+        setForm({ name: "", email: "", phone: "", method: "", message: "" });
+      } else {
+        alert(data.message || "Failed to send message");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to send message");
+    }
   };
 
   return (

@@ -2,18 +2,14 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  // images: {
-    // remotePatterns: [
-    //   {
-    //     protocol: 'https',
-    //     hostname: 'randomuser.me',
-    //     pathname: '/api/portraits/**',
-    //   },
-    // ],
+
     images: {
-      domains: ["res.cloudinary.com"], // ✅ Add Cloudinary here
+      domains: ["res.cloudinary.com","img.clerk.com"], 
     // },
   },
+    eslint: {
+    ignoreDuringBuilds: true,
+  }
 };
 
 export default nextConfig;

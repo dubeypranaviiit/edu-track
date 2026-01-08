@@ -1,4 +1,3 @@
-// types/types.ts
 export interface InstructorType {
     _id: string;
     name: string;

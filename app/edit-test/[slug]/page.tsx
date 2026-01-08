@@ -89,9 +89,9 @@ export default function page() {
         questions,
       });
 
-      alert('✅ Quiz updated successfully!');
+      alert('Quiz updated successfully!');
     } catch (err) {
-      console.error('❌ Error updating quiz:', err);
+      console.error(' Error updating quiz:', err);
       alert('Error updating quiz');
     }
   };

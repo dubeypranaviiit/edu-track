@@ -1,4 +1,3 @@
-// types.ts
 export interface CourseModule {
     title: string;
     duration: string;

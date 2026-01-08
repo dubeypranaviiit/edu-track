@@ -1,6 +1,4 @@
-// components/About/Hero.tsx
 import { motion } from "framer-motion";
-
 const Hero = () => (
   <motion.section
     initial={{ opacity: 0 }}

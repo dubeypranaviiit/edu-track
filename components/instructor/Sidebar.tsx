@@ -1,7 +1,7 @@
 
 import React from "react";
 import { MdDashboard } from "react-icons/md";
-
+import Link from "next/link";
 type NavItem = {
   id: string;
   icon: React.ElementType;
@@ -30,13 +30,11 @@ const Sidebar: React.FC<SidebarProps> = ({
       } h-screen bg-white dark:bg-gray-800 shadow-md transition-all`}
     >
       <div className="p-4 flex justify-between items-center">
-        <h1
-          className={`${
-            isOpen ? "block" : "hidden"
-          } text-xl font-bold text-gray-800 dark:text-white`}
-        >
-          Dashboard
-        </h1>
+        <h1 className={`${isOpen ? "block" : "hidden"} text-xl font-bold text-blue-700 dark:text-white`}>
+    {/* <Link href="/" className="cursor-pointer text-black">
+         InstructorProfile
+    </Link> */}
+  </h1>
         <button
           onClick={toggleSidebar}
           className="p-2 rounded bg-gray-200 dark:bg-gray-700"

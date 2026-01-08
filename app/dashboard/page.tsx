@@ -8,7 +8,7 @@ import Submissions from "@/components/instructor/sections/Submissions";
 import CourseCard from "@/components/Course/CourseCard";
 import CourseDashboard from "@/components/Course/CourseDashboard";
 import StudentProfile from "@/components/student/StudentProfile";
-
+import EnrolledCourse from "@/components/Course/enrolled/EnrolledCourse";
 const navItems = [
     { id: "courses", icon: FiHome, label: "Courses" },
     { id: "enrolled", icon: FiBook, label: "Enrolled" },
@@ -33,9 +33,10 @@ const DashboardPage = () => {
           navItems={navItems}
         />
         <div className="flex-1 h-screen flex flex-col">
-          <Header role={"Student"} />
+          {/* <Header role={"Student"} /> */}
           <main className="p-4 overflow-auto flex-1">
             {activeSection === "courses" && <CourseDashboard/>}
+           {activeSection === "enrolled" && <EnrolledCourse/>}
             {activeSection === "assignments" && <Assignments />} 
             {activeSection === "submissions" && <Submissions />}
             {/* {activeSection === "grading" && <Grading />} */}

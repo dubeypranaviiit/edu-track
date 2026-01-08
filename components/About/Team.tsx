@@ -1,6 +1,4 @@
-// components/About/Team.tsx
 import { motion } from "framer-motion";
-
 interface TeamMember {
   name: string;
   role: string;
