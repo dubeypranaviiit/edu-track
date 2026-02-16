@@ -15,7 +15,7 @@ const navItems = [
   { id: "courses", icon: FaBook, label: "Create Course" },
   { id: "all-courses", icon: FaBookOpen, label: "All Courses" },
   { id: "create-test", icon: FaRegClipboard, label: "Create Test" },
-  { id: "all-tests", icon: FaListUl, label: "All Tests" }, // ✅ Added
+  { id: "all-tests", icon: FaListUl, label: "All Tests" }, 
   { id: "assignments", icon: FaClipboardList, label: "Assignments" },
   { id: "submissions", icon: FaInbox, label: "Submissions" },
 ];
