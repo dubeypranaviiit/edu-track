@@ -46,7 +46,7 @@ export default function ExamPage() {
   const [score, setScore] = useState<number | null>(null);
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
 
-  // 🔹 Fetch quiz
+  //  Fetch quiz
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
@@ -62,7 +62,7 @@ export default function ExamPage() {
     if (slug) fetchQuiz();
   }, [slug]);
 
-  // 🔹 Timer
+  //  Timer
   useEffect(() => {
     if (!quiz || submitted) return;
     const timer = setInterval(() => {
@@ -78,7 +78,7 @@ export default function ExamPage() {
     return () => clearInterval(timer);
   }, [quiz, submitted]);
 
-  // 🔹 Track time spent per question
+  //  Track time spent per question
   const updateTimeSpent = (questionId: string) => {
     setAnswers((prev) => {
       const prevData = prev[questionId] || {};
@@ -92,7 +92,7 @@ export default function ExamPage() {
     });
   };
 
-  // 🔹 Handle answer selection
+  //  Handle answer selection
   const handleSelect = (questionId: string, optionIndex: number) => {
     if (submitted) return;
     updateTimeSpent(questionId);
@@ -103,7 +103,7 @@ export default function ExamPage() {
     setQuestionStartTime(Date.now());
   };
 
-  // 🔹 Mark for review
+  //  Mark for review
   const toggleReview = (questionId: string) => {
     setAnswers((prev) => ({
       ...prev,
@@ -111,7 +111,7 @@ export default function ExamPage() {
     }));
   };
 
-  // 🔹 Navigate
+  //  Navigate
   const next = () => {
     updateTimeSpent(quiz!.questions[currentIndex]._id);
     setQuestionStartTime(Date.now());
@@ -123,7 +123,7 @@ export default function ExamPage() {
     if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
   };
 
-  // 🔹 Submit
+  //  Submit
   const handleSubmit = async () => {
     if (!quiz || !profile?._id || submitted) return;
     updateTimeSpent(quiz.questions[currentIndex]._id);
