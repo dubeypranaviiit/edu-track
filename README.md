@@ -1,4 +1,4 @@
-# 🎓 EduTrack – Learning Management System (LMS)
+#  EduTrack – Learning Management System (LMS)
 
 EduTrack is a **full-stack Learning Management System (LMS)** built using **Next.js 15, React, TypeScript, and MongoDB**, designed to simulate a real-world EdTech platform.  
 It supports **students, instructors**, and is built with scalability in mind for future **admin features**.
@@ -10,13 +10,13 @@ This project focuses on **real product workflows**, clean UI/UX, and production-
 
 ---
 
-## 🧩 Key Features
+##  Key Features
 
-### 👨‍🎓 Student Features
+###  Student Features
 - Browse and search courses
 - View course details with pricing & discounts
 - Enroll in courses
-- Watch video lectures (streaming support)
+- Watch video lectures 
 - Attempt free tests & quizzes
 - Submit assignments
 - Track enrolled courses
@@ -24,7 +24,7 @@ This project focuses on **real product workflows**, clean UI/UX, and production-
 
 ---
 
-### 👨‍🏫 Instructor Features
+###  Instructor Features
 - Instructor dashboard
 - Create, edit, publish & unpublish courses
 - Upload course thumbnails & logos
@@ -37,7 +37,7 @@ This project focuses on **real product workflows**, clean UI/UX, and production-
 
 ---
 
-### 🔐 Authentication & Payments
+###  Authentication & Payments
 - Secure authentication using **Clerk**
 - Role-based access (Student / Instructor)
 - Stripe integration for payments (ready for production)
@@ -63,7 +63,6 @@ This project focuses on **real product workflows**, clean UI/UX, and production-
 
 ### Media & Utilities
 - **Cloudinary** – media uploads
-- **HLS.js** – video streaming
 - **Multer / Formidable** – file handling
 - **Slugify** – SEO-friendly URLs
 - **React Hook Form** – form handling
@@ -82,7 +81,7 @@ This project focuses on **real product workflows**, clean UI/UX, and production-
 
 ---
 
-## 🧪 Future Enhancements
+##  Future Enhancements
 - Admin panel
 - Course progress tracking
 - Certificate generation (PDF)
@@ -92,7 +91,7 @@ This project focuses on **real product workflows**, clean UI/UX, and production-
 
 ---
 
-## 🧑‍🎓 About the Developer
+##  About the Developer
 
 **Pranav Abhimanyu**  
 3rd Year Engineering Student  
@@ -102,12 +101,12 @@ Passionate about full-stack development and scalable web applications.
 
 ---
 
-## 📜 License
+##  License
 This project is for educational purposes.  
 Feel free to fork and explore.
 
 ---
 
-## ⭐ Acknowledgements
+##  Acknowledgements
 - Next.js & React Community
 - Open-source libraries used in this project
