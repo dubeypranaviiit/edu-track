@@ -44,7 +44,7 @@ This project focuses on **real product workflows**, clean UI/UX, and production-
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 ### Frontend
 - **Next.js 15 (App Router)**
