@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const updateChapter = async (chapterId: string, title: string) => {
   try {
-    const res = await axios.patch(`/api/create-chapter/${chapterId}`, { title });
+    const res = await axios.patch(`/api/instructor/create-chapter/${chapterId}`, { title });
     return res.data;
   } catch (err) {
     console.error("Failed to update chapter:", err);
@@ -12,7 +12,7 @@ export const updateChapter = async (chapterId: string, title: string) => {
 
 export const deleteChapter = async (chapterId: string) => {
   try {
-    const res = await axios.delete(`/api/create-chapter/${chapterId}`);
+    const res = await axios.delete(`/api/instructor/create-chapter/${chapterId}`);
     return res.data;
   } catch (err) {
     console.error("Failed to delete chapter:", err);

@@ -64,7 +64,7 @@ export const useFetchCourseStore = create<CourseStore>((set, get) => ({
 
     set({ loadingCourses: true, errorCourses: null });
     try {
-      const res = await axios.get("/api/create-course");
+      const res = await axios.get("/api/instructor/create-course");
       const data = res.data;
       const coursesArray = Array.isArray(data) ? data : data.courses;
       const published = coursesArray.filter((c: Course) => c.isPublished);

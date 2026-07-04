@@ -30,7 +30,7 @@ const CourseManagementDashboard = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const res = await axios.get('/api/create-course');
+        const res = await axios.get('/api/instructor/create-course');
         setCourses(res.data.courses);
       } catch (err) {
         console.error('Failed to fetch courses:', err);
@@ -47,7 +47,7 @@ const CourseManagementDashboard = () => {
     if (!course) return;
 
     try {
-      const updated = await axios.patch(`/api/create-course/${slug}`, {
+      const updated = await axios.patch(`/api/instructor/create-course/${slug}`, {
         isPublished: !course.isPublished,
       });
 
@@ -63,7 +63,7 @@ const CourseManagementDashboard = () => {
 
   const handleDelete = async (slug: string) => {
     try {
-      await axios.delete(`/api/create-course/${slug}`);
+      await axios.delete(`/api/instructor/create-course/${slug}`);
       setCourses((prev) => prev.filter((c) => c.slug !== slug));
     } catch (err) {
       console.error('Failed to delete course:', err);

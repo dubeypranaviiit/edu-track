@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongoose";
 import User from "@/models/user";
+import { auth } from "@clerk/nextjs/server";
 
 export async function GET(
   req: NextRequest,
@@ -30,7 +31,19 @@ export async function PUT(
   try {
     await connectDB();
     const { clerkId } = await params;
+    
+    const { userId } = await auth();
+    if (!userId || userId !== clerkId) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const data = await req.json();
+
+    // Strip protected fields so users cannot update their own role, status, or IDs
+    delete data.role;
+    delete data.isActive;
+    delete data.clerkId;
+    delete data.stripeCustomerId;
 
     const updatedUser = await User.findOneAndUpdate(
       { clerkId },

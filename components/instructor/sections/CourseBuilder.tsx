@@ -73,7 +73,7 @@ export default function CourseBuilder() {
       if (thumbnailFile) formData.append('thumbnail', thumbnailFile)
       if (logoFile) formData.append('logo', logoFile)
 
-      const res = await axios.post('/api/create-course', formData)
+      const res = await axios.post('/api/instructor/create-course', formData)
       alert('🎉 Course successfully created!')
 
       // Reset form

@@ -1,6 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongoose";
 import Contact from "@/models/contact";
+import { requireRole } from "@/lib/auth/requireRole";
+
+export async function GET(req: NextRequest) {
+  try {
+    await connectDB();
+    const authResult = await requireRole(["admin"]);
+    if ("error" in authResult) {
+      return NextResponse.json({ error: authResult.error }, { status: authResult.status });
+    }
+
+    const messages = await Contact.find().sort({ createdAt: -1 });
+    return NextResponse.json(messages, { status: 200 });
+  } catch (err) {
+    console.error("Failed to fetch contact messages:", err);
+    return NextResponse.json({ message: "Failed to fetch messages" }, { status: 500 });
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {

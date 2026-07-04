@@ -9,6 +9,7 @@ export interface IUser extends Document {
   role: Role;
   avatar?: string;
   isActive: boolean;
+  instructorStatus: "none" | "pending" | "approved" | "rejected";
   stripeCustomerId?: string;
   bio?: string;
   socialLinks?: {
@@ -33,6 +34,11 @@ const UserSchema = new Schema<IUser>(
     },
     avatar: String,
     isActive: { type: Boolean, default: true },
+    instructorStatus: {
+      type: String,
+      enum: ["none", "pending", "approved", "rejected"],
+      default: "none",
+    },
     stripeCustomerId: String,
     bio: { type: String, trim: true, maxlength: 500 },
     socialLinks: {
