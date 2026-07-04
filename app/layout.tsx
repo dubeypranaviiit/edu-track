@@ -31,10 +31,14 @@ export default function RootLayout({
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           {/* Wrap children in client component */}
           <UserSyncProvider>
-            <Header />
-            {children}
-             <Footer />
-            </UserSyncProvider>
+            <div className="flex flex-col min-h-screen">
+              <Header />
+              <main className="flex-grow flex-1">
+                {children}
+              </main>
+              <Footer />
+            </div>
+          </UserSyncProvider>
         </body>
       </html>
     </ClerkProvider>

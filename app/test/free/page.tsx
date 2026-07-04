@@ -19,10 +19,17 @@ const AllTestsPage = () => {
     q.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  if (loading) return <p className="text-center mt-10">Loading tests...</p>;
+  if (loading) {
+    return (
+      <div className="flex flex-col justify-center items-center py-32 space-y-4">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
+        <p className="text-gray-500 dark:text-gray-400 font-medium">Loading tests...</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-5xl mx-auto p-4">
+    <div className="max-w-5xl mx-auto p-4 py-10">
       <h1 className="text-3xl font-bold mb-6 text-center">Available Tests</h1>
 
       <input
@@ -30,11 +37,17 @@ const AllTestsPage = () => {
         placeholder="Search tests..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        className="w-full border rounded-md px-4 py-2 mb-6"
+        className="w-full border rounded-md px-4 py-2 mb-6 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
       />
 
       {filteredQuizzes.length === 0 && (
-        <p className="text-center text-gray-500">No tests found</p>
+        <div className="text-center py-20 px-4 bg-gray-50 dark:bg-gray-800/30 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700">
+          <BsQuestionCircle className="mx-auto mb-4 text-gray-400" size={48} />
+          <h3 className="text-lg font-bold text-gray-700 dark:text-gray-300">No Tests Found</h3>
+          <p className="text-gray-500 dark:text-gray-400 mt-1 max-w-sm mx-auto text-sm">
+            We couldn't find any tests matching your search query. Try searching for different terms.
+          </p>
+        </div>
       )}
 
       <div className="grid gap-6">

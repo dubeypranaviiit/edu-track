@@ -1,7 +1,9 @@
-﻿import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongoose';
 import Quiz from '@/models/Quiz/quiz';
 import Question from '@/models/Quiz/question';
+import { auth } from '@clerk/nextjs/server';
+import User from '@/models/user';
 
 type QuizRouteContext = {
   params: Promise<{ slug: string }>;
@@ -32,8 +34,15 @@ export async function GET(req: Request, { params }: QuizRouteContext) {
 }
 
 export async function PATCH(req: Request, { params }: QuizRouteContext) {
+  const { userId } = await auth();
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     await connectDB();
+    const currentUser = await User.findOne({ clerkId: userId });
+    if (!currentUser || (currentUser.role !== "instructor" && currentUser.role !== "admin")) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
     const { slug } = await params;
 
     let data: any;
@@ -62,8 +71,15 @@ export async function PATCH(req: Request, { params }: QuizRouteContext) {
 }
 
 export async function DELETE(req: Request, { params }: QuizRouteContext) {
+  const { userId } = await auth();
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     await connectDB();
+    const currentUser = await User.findOne({ clerkId: userId });
+    if (!currentUser || (currentUser.role !== "instructor" && currentUser.role !== "admin")) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
     const { slug } = await params;
 
     const quiz = await Quiz.findOneAndDelete({ slug });

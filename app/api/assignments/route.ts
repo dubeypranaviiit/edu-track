@@ -8,6 +8,8 @@ import { connectDB } from "@/lib/mongoose";
 import { uploadToCloudinary } from "@/lib/cloudinaryUpload";
 import Assignment from "@/models/Course/assignment";
 import Course from "@/models/Course/course";
+import { auth } from "@clerk/nextjs/server";
+import User from "@/models/user";
 async function saveTempFile(file: File): Promise<string> {
   const buffer = Buffer.from(await file.arrayBuffer());
   const filename = `${uuidv4()}-${file.name}`;
@@ -17,16 +19,34 @@ async function saveTempFile(file: File): Promise<string> {
 }
 
 export async function POST(req: NextRequest) {
+  const { userId } = await auth();
+  if (!userId) return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+
   await connectDB();
 
   try {
     const formData = await req.formData();
+    const uploadedBy = formData.get("instructor") as string; // MongoDB _id of instructor
+
+    // Check if user exists and has instructor/admin role
+    const currentUser = await User.findOne({ clerkId: userId });
+    if (!currentUser) {
+      return NextResponse.json({ success: false, error: "User profile not found." }, { status: 404 });
+    }
+
+    if (currentUser.role !== "instructor" && currentUser.role !== "admin") {
+      return NextResponse.json({ success: false, error: "Forbidden: Only instructors can create assignments." }, { status: 403 });
+    }
+
+    // Verify ownership/identity
+    if (currentUser._id.toString() !== uploadedBy) {
+      return NextResponse.json({ success: false, error: "Forbidden: Instructor ID mismatch." }, { status: 403 });
+    }
 
     const slugInput = formData.get("slug") as string;
     const topic = formData.get("topic") as string;
     const subtopic = (formData.get("subtopic") as string) || "";
     const type = formData.get("type") as "file" | "text";
-    const uploadedBy = formData.get("instructor") as string;
     const textContent = (formData.get("textContent") as string) || "";
     if (!slugInput || !topic || !type || !uploadedBy) {
       return NextResponse.json({ success: false, error: "Missing required fields." }, { status: 400 });

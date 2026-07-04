@@ -1,5 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useUserStore } from "@/store/useUserStore";
 import Sidebar from "@/components/instructor/Sidebar";
 import Header from "@/components/instructor/Header";
 import Courses from "@/components/instructor/sections/Courses";
@@ -23,6 +25,22 @@ const DashboardPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeSection, setActiveSection] = useState("courses");
   const [darkMode, setDarkMode] = useState(false);
+  const { profile, loading } = useUserStore();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && profile && profile.role !== "instructor" && profile.role !== "admin") {
+      router.replace("/dashboard");
+    }
+  }, [profile, loading, router]);
+
+  if (loading || !profile) {
+    return <div className="flex h-screen items-center justify-center bg-gray-50 dark:bg-gray-900 text-gray-600 dark:text-gray-300">Loading...</div>;
+  }
+
+  if (profile.role !== "instructor" && profile.role !== "admin") {
+    return null; // redirect in progress
+  }
 
   return (
     <div className={`${darkMode ? "dark" : ""}`}>

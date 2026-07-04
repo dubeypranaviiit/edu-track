@@ -2,10 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongoose";
 import Course from "@/models/Course/course";
 
-export async function GET(req: NextRequest, context: any) { 
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ slug: string }> }
+) { 
   await connectDB();
   try {
-    const { slug } = context.params;
+    const { slug } = await params;
 
     const course = await Course.findOne({ slug }).populate({
       path: "chapters",

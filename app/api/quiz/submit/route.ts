@@ -1,7 +1,10 @@
-﻿import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongoose";
 import Submission from "@/models/Quiz/submission";
 import Question from "@/models/Quiz/question";
+import Quiz from "@/models/Quiz/quiz";
+import User from "@/models/user";
+import { auth } from "@clerk/nextjs/server";
 
 type QuestionScoreDoc = {
   _id: { toString: () => string };
@@ -11,6 +14,9 @@ type QuestionScoreDoc = {
 };
 
 export async function POST(req: Request) {
+  const { userId: clerkId } = await auth();
+  if (!clerkId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   await connectDB();
 
   try {
@@ -20,10 +26,30 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing quizId or userId" }, { status: 400 });
     }
 
+    // Verify user owns the submission identity
+    const currentUser = await User.findOne({ clerkId });
+    if (!currentUser || currentUser._id.toString() !== userId) {
+      return NextResponse.json({ error: "Forbidden: User identity mismatch" }, { status: 403 });
+    }
+
     if (!Array.isArray(answers)) {
       return NextResponse.json(
         { error: "Invalid format: 'answers' must be an array" },
         { status: 400 }
+      );
+    }
+
+    // Enforce maxAttempts check
+    const quiz = await Quiz.findById(quizId).select("maxAttempts passingMarks");
+    if (!quiz) {
+      return NextResponse.json({ error: "Quiz not found" }, { status: 404 });
+    }
+
+    const existingAttempts = await Submission.countDocuments({ quiz: quizId, user: userId });
+    if (existingAttempts >= (quiz.maxAttempts ?? 1)) {
+      return NextResponse.json(
+        { error: `Maximum attempts (${quiz.maxAttempts ?? 1}) reached for this quiz` },
+        { status: 403 }
       );
     }
 

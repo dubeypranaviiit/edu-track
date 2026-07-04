@@ -145,7 +145,8 @@ export default function ExamPage() {
         answers: answerArray,
         timeTaken: totalTimeTaken,
       });
-      setScore(res.data.score);
+      // Redirect to the detailed results page
+      router.push(`/results/${res.data._id}`);
     } catch (err) {
       console.error("Error submitting quiz:", err);
     }

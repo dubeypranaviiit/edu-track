@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import Quiz from '@/models/Quiz/quiz';
 import { connectDB } from '@/lib/mongoose';
+import { auth } from '@clerk/nextjs/server';
+import User from '@/models/user';
 
 export async function GET() {
   try {
@@ -14,8 +16,17 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const { userId } = await auth();
+  if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
   try {
     await connectDB();
+
+    const currentUser = await User.findOne({ clerkId: userId });
+    if (!currentUser || (currentUser.role !== 'instructor' && currentUser.role !== 'admin')) {
+      return NextResponse.json({ error: 'Forbidden: Only instructors can create quizzes' }, { status: 403 });
+    }
+
     const data = await req.json();
     const quiz = await Quiz.create(data);
     return NextResponse.json({ quiz });
@@ -26,8 +37,17 @@ export async function POST(req: Request) {
 }
 
 export async function PUT(req: Request) {
+  const { userId } = await auth();
+  if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
   try {
     await connectDB();
+
+    const currentUser = await User.findOne({ clerkId: userId });
+    if (!currentUser || (currentUser.role !== 'instructor' && currentUser.role !== 'admin')) {
+      return NextResponse.json({ error: 'Forbidden: Only instructors can update quizzes' }, { status: 403 });
+    }
+
     const { slug, questions } = await req.json();
     const quiz = await Quiz.findOneAndUpdate({ slug }, { questions }, { new: true });
     if (!quiz) return NextResponse.json({ message: 'Quiz not found' }, { status: 404 });

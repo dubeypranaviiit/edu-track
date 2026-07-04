@@ -40,6 +40,7 @@ const submissionSchema = new Schema<SubmissionDocument>(
 );
 
 submissionSchema.index({ quiz: 1, user: 1 }); // quick lookup per user per quiz
+submissionSchema.index({ user: 1, attemptedAt: -1 }); // quick results list sorting
 
 export default mongoose.models.Submission ||
   mongoose.model<SubmissionDocument>("Submission", submissionSchema);

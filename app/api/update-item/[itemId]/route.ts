@@ -3,10 +3,11 @@ import Item from "@/models/Course/item";
 import { NextRequest, NextResponse } from "next/server";
 import { uploadToCloudinary } from "@/lib/cloudinaryUpload";
 
-export async function PATCH(req: NextRequest, context: any
-  // { params }: { params: { itemId: string } }
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ itemId: string }> }
 ) {
-  const { itemId } = context.params;
+  const { itemId } = await params;
 
   try {
     await connectDB();
@@ -47,9 +48,11 @@ export async function PATCH(req: NextRequest, context: any
   }
 }
 
-export async function DELETE(req: NextRequest, context: any
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ itemId: string }> }
 ) {
-  const { itemId } = context.params;
+  const { itemId } = await params;
 
   try {
     await connectDB();
