@@ -1,8 +1,9 @@
+﻿import type { ReactNode } from "react";
 import { motion } from "framer-motion";
 
 interface Feature {
   title: string;
-  icon: JSX.Element;
+  icon: ReactNode;
   description: string;
 }
 

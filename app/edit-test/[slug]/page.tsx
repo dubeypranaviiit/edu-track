@@ -29,10 +29,8 @@ export default function page() {
   useEffect(() => {
     const fetchQuiz = async () => {
         if (!slug) return;
-        console.log(`Slug aaya hua hai :${slug}`);
       try {
         const res = await axios.get(`/test-create/${slug}`);
-        console.log(res);
         setQuiz(res.data.quiz);
         setQuestions(res.data.quiz.questions || []);
       } catch (err) {
@@ -50,15 +48,24 @@ export default function page() {
   };
 
   const handleQuestionChange = (index: number, field: keyof QuestionInput, value: any) => {
-    const updated = [...questions];
-    updated[index][field] = value;
-    setQuestions(updated);
+    setQuestions((prev) =>
+      prev.map((question, i) =>
+        i === index ? { ...question, [field]: value } : question
+      )
+    );
   };
 
   const handleOptionChange = (qIndex: number, oIndex: number, value: string) => {
-    const updated = [...questions];
-    updated[qIndex].options[oIndex] = value;
-    setQuestions(updated);
+    setQuestions((prev) =>
+      prev.map((question, i) =>
+        i === qIndex
+          ? {
+              ...question,
+              options: question.options.map((option, j) => (j === oIndex ? value : option)),
+            }
+          : question
+      )
+    );
   };
 
   const addQuestion = () => {
@@ -218,3 +225,4 @@ export default function page() {
     
   );
 }
+

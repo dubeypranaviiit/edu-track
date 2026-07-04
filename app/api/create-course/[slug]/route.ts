@@ -2,8 +2,10 @@ import { connectDB } from "@/lib/mongoose";
 import Course from "@/models/Course/course";
 import Chapter from "@/models/Course/chapter";
 import Subtopic from "@/models/Course/subTopic";
+import Item from "@/models/Course/item";
 import { NextRequest, NextResponse } from "next/server";
-import Item from '@/models/Course/item'; 
+import { auth } from "@clerk/nextjs/server";
+
 const calculateFinalPrice = (originalPrice: number, discountPercent: number): number => {
   if (discountPercent > 0) {
     return originalPrice - (originalPrice * discountPercent) / 100;
@@ -11,12 +13,13 @@ const calculateFinalPrice = (originalPrice: number, discountPercent: number): nu
   return originalPrice;
 };
 
-export async function GET(req: NextRequest, context: any
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ slug: string }> }
 ) {
-console.log(`Request aaya hai`);
   try {
     await connectDB();
-    const {slug} = await context.params;
+    const { slug } = await params;
   
     const course = await Course.findOne({ slug })
       .populate({
@@ -24,7 +27,7 @@ console.log(`Request aaya hai`);
         model: Chapter,
         populate: {
           path: 'subtopics',
-          model:Subtopic,
+          model: Subtopic,
           populate: {
             path: 'items',
             model: Item,
@@ -38,10 +41,9 @@ console.log(`Request aaya hai`);
         { status: 404 }
       );
     }
-  console.log(course);
 
     const courseWithFinalPrice = {
-      ...course,
+      ...course.toObject(),
       finalPrice: calculateFinalPrice(course.originalPrice, course.discountPercent),
     };
 
@@ -57,69 +59,113 @@ console.log(`Request aaya hai`);
     );
   }
 }
-export async function DELETE(req: NextRequest, context: any
- 
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ slug: string }> }
 ) {
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     await connectDB();
-    const {slug}=await context.params
-    const deleted = await Course.findOneAndDelete({ slug:slug });
+    const { slug } = await params;
 
-    if (!deleted) {
-      return NextResponse.json({ message: 'Course not found' }, { status: 404 });
+    const course = await Course.findOne({ slug }).populate({
+      path: "chapters",
+      populate: { path: "subtopics", populate: { path: "items" } },
+    });
+
+    if (!course) {
+      return NextResponse.json({ message: "Course not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ message: 'Course deleted successfully' });
+    // Delete all nested items, subtopics, chapters, then the course
+    for (const chapter of (course.chapters as any[] || [])) {
+      for (const subtopic of (chapter.subtopics as any[] || [])) {
+        await Item.deleteMany({ _id: { $in: subtopic.items } });
+        await Subtopic.findByIdAndDelete(subtopic._id);
+      }
+      await Chapter.findByIdAndDelete(chapter._id);
+    }
+
+    await Course.findByIdAndDelete(course._id);
+
+    return NextResponse.json({ message: "Course deleted successfully" });
   } catch (error) {
     console.error('[DELETE COURSE ERROR]', error);
     return NextResponse.json({ message: 'Server error' }, { status: 500 });
   }
 }
 
-export async function PUT(req: NextRequest,context: any
-
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: Promise<{ slug: string }> }
 ) {
-  const { slug } =await  context.params
-  const { title, description, thumbnail, logo, originalPrice, discountPercent, category, level, duration, features, certificate } = await req.json()
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { slug } = await params;
+  const {
+    title,
+    description,
+    thumbnail,
+    logo,
+    originalPrice,
+    discountPercent,
+    category,
+    level,
+    duration,
+    features,
+    certificate
+  } = await req.json();
 
   try {
-    await connectDB()
-    console.log(slug);
+    await connectDB();
   
-    const course = await Course.findOne({ slug })
-    console.log(course);
+    const course = await Course.findOne({ slug });
     if (!course) {
-      return NextResponse.json({ message: 'Course not found' }, { status: 404 })
+      return NextResponse.json({ message: 'Course not found' }, { status: 404 });
     }
 
-  
-    course.title = title || course.title
-    course.description = description || course.description
-    course.logo = logo || course.logo
-    course.originalPrice = originalPrice || course.originalPrice
-    course.discountPercent = discountPercent || course.discountPercent
-    course.category = category || course.category
-    course.level = level || course.level
-    course.duration = duration || course.duration
-    course.features = features || course.features
-    course.certificate = certificate ?? course.certificate
+    course.title = title || course.title;
+    course.description = description || course.description;
+    course.thumbnail = thumbnail || course.thumbnail;
+    course.logo = logo || course.logo;
+    course.originalPrice = originalPrice || course.originalPrice;
+    course.discountPercent = discountPercent || course.discountPercent;
+    course.category = category || course.category;
+    course.level = level || course.level;
+    course.duration = duration || course.duration;
+    course.features = features || course.features;
+    course.certificate = certificate ?? course.certificate;
 
-    await course.save()
+    await course.save();
 
-    return NextResponse.json(course)
+    return NextResponse.json(course);
   } catch (error) {
-    console.error(error)
-    return NextResponse.json({ message: 'Failed to update course metadata' }, { status: 500 })
+    console.error(error);
+    return NextResponse.json({ message: 'Failed to update course metadata' }, { status: 500 });
   }
 }
+
 export async function PATCH(
-  request: Request,context: any
-  
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> }
 ) {
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     await connectDB();
 
-    const { slug } = await context.params;
+    const { slug } = await params;
     const body = await request.json();
     const { isPublished } = body;
 
@@ -130,7 +176,6 @@ export async function PATCH(
     );
 
     if (!updatedCourse) {
-        console.log(`Course  not found in this code`);
       return NextResponse.json({ message: "Course not found" }, { status: 404 });
     }
 

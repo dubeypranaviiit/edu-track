@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import React, { useState } from 'react'
 import axios from 'axios'
 import { Button } from '@/components/ui/button'
@@ -6,22 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-
-interface Item {
-  _id: string
-  title: string
-  type: 'video' | 'reading' | 'assignment'
-  content: string
-  uploadType?: 'upload' | 'url'
-  videoUrl?: string
-  resources?: string[]
-}
-
-interface Subtopic {
-  _id: string
-  title: string
-  items: Item[]
-}
+import { Subtopic } from '@/types/course'
 
 interface Props {
   subtopic: Subtopic
@@ -192,7 +177,7 @@ const ItemEditor = ({ subtopic, onUpdate }: Props) => {
                     <a key={idx} href={res} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-sm mt-2 block">Download Assignment</a>
                   ))}
                   <div className="flex gap-2 mt-2">
-                    <Button size="sm" variant="outline" onClick={() => { setEditItemId(item._id); setEditTitle(item.title); setEditContent(item.content) }}>Edit</Button>
+                    <Button size="sm" variant="outline" onClick={() => { setEditItemId(item._id); setEditTitle(item.title); setEditContent(item.content ?? '') }}>Edit</Button>
                     <Button size="sm" variant="destructive" onClick={() => handleDeleteItem(item._id)}>Delete</Button>
                   </div>
                 </>
@@ -205,3 +190,4 @@ const ItemEditor = ({ subtopic, onUpdate }: Props) => {
 }
 
 export default ItemEditor
+

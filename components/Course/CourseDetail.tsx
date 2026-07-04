@@ -14,7 +14,7 @@ import { BsCheckCircle } from "react-icons/bs";
 import Image from "next/image";
 import EnrollNow from "../payment/EnrollNow";
 
-const CourseDetail = ({ course }) => {
+const CourseDetail = ({ course }: { course: any }) => {
   const [activeModule, setActiveModule] = useState<number | null>(null);
   const { user } = useUser(); 
   const userId = user?.id;   
@@ -58,7 +58,7 @@ const CourseDetail = ({ course }) => {
           <section className="bg-gray-800 p-6 rounded-lg">
             <h2 className="text-2xl font-bold mb-4">What You'll Learn</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {course.features.map((item, index) => (
+              {course.features.map((item: any, index: number) => (
                 <div
                   key={index}
                   className="flex items-center space-x-3 hover:bg-gray-700 p-3 rounded-lg"
@@ -73,7 +73,7 @@ const CourseDetail = ({ course }) => {
           {/* Course Content */}
           <section className="bg-gray-800 p-6 rounded-lg">
             <h2 className="text-2xl font-bold mb-4">Course Content</h2>
-            {course.chapters.map((chapter, index) => (
+            {course.chapters.map((chapter: any, index: number) => (
               <div key={chapter._id || index} className="mb-4">
                 <button
                   onClick={() =>
@@ -89,12 +89,12 @@ const CourseDetail = ({ course }) => {
                 </button>
                 {activeModule === index && (
                   <div className="mt-2 ml-4 p-4 bg-gray-700 rounded-lg space-y-2">
-                    {chapter.subtopics.map((subtopic, i) => (
+                    {chapter.subtopics.map((subtopic: any, i: number) => (
                       <div key={subtopic._id || i}>
                         <div className="text-lg font-medium mb-1">
                           {subtopic.title}
                         </div>
-                        {subtopic.items.map((item, j) => (
+                        {subtopic.items.map((item: any, j: number) => (
                           <div
                             key={item._id || j}
                             className="flex items-center space-x-2 pl-4 py-1"
@@ -116,7 +116,7 @@ const CourseDetail = ({ course }) => {
             <section className="bg-gray-800 p-6 rounded-lg">
               <h2 className="text-2xl font-bold mb-4">Student Testimonials</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {course.testimonials.map((t, i) => (
+                {course.testimonials.map((t: any, i: number) => (
                   <div key={i} className="bg-gray-700 p-4 rounded-lg">
                     <div className="flex space-x-4 mb-2">
                       <Image
@@ -149,7 +149,16 @@ const CourseDetail = ({ course }) => {
           </div>
 
           {/* Enroll Button */}
-          <EnrollNow course={course} userId={userId} />
+          {course.isEnrolled ? (
+            <a
+              href={`/enrolled/${course.slug}`}
+              className="w-full inline-block text-center bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-lg font-semibold transition cursor-pointer"
+            >
+              Start Learning / Go to Course
+            </a>
+          ) : (
+            <EnrollNow course={course} userId={userId} />
+          )}
 
           <div className="mt-6 space-y-3">
             {course.features.map((feature: any, i: number) => (

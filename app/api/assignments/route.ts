@@ -28,7 +28,6 @@ export async function POST(req: NextRequest) {
     const type = formData.get("type") as "file" | "text";
     const uploadedBy = formData.get("instructor") as string;
     const textContent = (formData.get("textContent") as string) || "";
-    console.log(formData);
     if (!slugInput || !topic || !type || !uploadedBy) {
       return NextResponse.json({ success: false, error: "Missing required fields." }, { status: 400 });
       }

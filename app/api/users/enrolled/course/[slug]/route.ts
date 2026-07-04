@@ -1,17 +1,19 @@
 
-import { NextResponse,NextRequest } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import Subtopic from "@/models/Course/subTopic";
 import Item from "@/models/Course/item";
 import Course from "@/models/Course/course";
-import User from "@/models/User";
+import User from "@/models/user";
 import Enrollment from "@/models/enrollment.model";
 import { connectDB } from "@/lib/mongoose";
-export async function GET(req: NextRequest, context: any
- 
+
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   await connectDB();
 
-  const { slug } = context.params; 
+  const { slug } = await params;
   const clerkId = req.nextUrl.searchParams.get("clerkId");
 
   if (!clerkId) {
@@ -44,7 +46,7 @@ export async function GET(req: NextRequest, context: any
 
     return NextResponse.json({ course });
   } catch (err) {
-    console.log(`moncghcdhshbfjdnslddfnkjcgxfkln dmcklnfdmc;lbh`,err);
+    console.error("Failed to fetch enrolled course:", err);
     return NextResponse.json({ message: "Failed to fetch course" }, { status: 500 });
   }
 }

@@ -91,7 +91,6 @@ export default function CourseBuilder() {
       })
       setThumbnailFile(null)
       setLogoFile(null)
-      console.log(res.data)
     } catch (err: any) {
       console.error('Error:', err.response?.data || err.message)
       alert('Error creating course. Check console.')

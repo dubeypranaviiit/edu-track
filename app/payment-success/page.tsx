@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import axios from "axios";
 
@@ -12,7 +12,7 @@ interface SessionData {
   payment_status: string;
 }
 
-const PaymentSuccessPage = () => {
+const PaymentSuccessPageContent = () => {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get("session_id");
   const [loading, setLoading] = useState(true);
@@ -26,6 +26,7 @@ const PaymentSuccessPage = () => {
       try {
         const res = await axios.get(`/api/payment/session/${sessionId}`);
         setSession(res.data);
+        await axios.post("/api/payment/confirm", { sessionId });
       } catch (err: any) {
         console.error(err);
         setError("Failed to retrieve payment details.");
@@ -53,7 +54,7 @@ const PaymentSuccessPage = () => {
           </p>
           <p className="mb-4">Payment Status: {session.payment_status}</p>
           <a
-            href="/courses"
+            href="/course"
             className="inline-block bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded-lg transition"
           >
             Go to Courses
@@ -64,4 +65,10 @@ const PaymentSuccessPage = () => {
   );
 };
 
-export default PaymentSuccessPage;
+export default function PaymentSuccessPage() {
+  return (
+    <Suspense fallback={<div className="p-10 text-center">Loading...</div>}>
+      <PaymentSuccessPageContent />
+    </Suspense>
+  );
+}

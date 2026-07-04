@@ -2,7 +2,9 @@ import React from "react";
 import HeroSection from "@/components/Home/HeroSection";
 import HowItWorks from "@/components/Home/Working";
 import WhyChooseUs from "@/components/Home/WhyChooseUs";
-import Testimonials from "@/components/Home/Testimonials";
+import dynamic from "next/dynamic";
+
+const Testimonials = dynamic(() => import("@/components/Home/Testimonials"));
 import OurCourse from "@/components/Home/OurCourse";
 const Home: React.FC = () => {
   return (

@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     const quiz = await Quiz.create(data);
     return NextResponse.json({ quiz });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return NextResponse.json({ message: 'Failed to create quiz', error: (error as Error).message }, { status: 500 });
   }
 }

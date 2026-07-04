@@ -1,8 +1,14 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongoose";
 import Submission from "@/models/Quiz/submission";
-
 import Question from "@/models/Quiz/question";
+
+type QuestionScoreDoc = {
+  _id: { toString: () => string };
+  correctOptionIndex: number;
+  marks: number;
+  negativeMarks?: number;
+};
 
 export async function POST(req: Request) {
   await connectDB();
@@ -21,8 +27,7 @@ export async function POST(req: Request) {
       );
     }
 
-  
-    const questionDocs = await Question.find({ quiz: quizId }).lean();
+    const questionDocs = (await Question.find({ quiz: quizId }).lean()) as unknown as QuestionScoreDoc[];
 
     let score = 0;
 
@@ -39,6 +44,7 @@ export async function POST(req: Request) {
         isCorrect,
       };
     });
+
     const submission = await Submission.create({
       quiz: quizId,
       user: userId,
@@ -55,3 +61,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
+

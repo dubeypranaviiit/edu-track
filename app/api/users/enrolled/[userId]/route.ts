@@ -4,13 +4,13 @@ import Enrollment from "@/models/enrollment.model";
 import Course from "@/models/Course/course";
 import { connectDB } from "@/lib/mongoose";
 
-connectDB();
-
 export async function GET(
-  req: NextRequest,context: any
+  req: NextRequest,
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
-    const { userId } = context.params;
+    await connectDB();
+    const { userId } = await params;
 
     if (!userId) {
       return NextResponse.json(

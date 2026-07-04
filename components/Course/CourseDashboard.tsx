@@ -28,18 +28,17 @@ const CourseDashboard: React.FC = () => {
   };
 
   const mappedCourses: CourseCardProps[] = courses.map((course) => ({
-    imageUrl: course.thumbnail,
-    logoUrl: "/logo.png",
     title: course.title,
-    subtitle: course.category,
+    subtitle: course.category || "General",
     instructor: course.instructor?.name || "Unknown Instructor",
     originalPrice: course.originalPrice,
     discountPercent: course.discountPercent,
-    finalPrice: course.finalPrice,
+    finalPrice: course.finalPrice ?? course.originalPrice,
     duration: course.duration || "5h 30m",
     lessons: course.chapters?.length || 0,
-    certificate: course.certificate,
-    thumbnail: course.thumbnail,
+    certificate: course.certificate || false,
+    thumbnail: course.thumbnail || "",
+    logo: course.logo || "/logo.png",
     slug: course.slug,
   }));
 
@@ -139,3 +138,4 @@ const CourseDashboard: React.FC = () => {
 };
 
 export default CourseDashboard;
+

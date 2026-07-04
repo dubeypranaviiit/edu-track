@@ -31,8 +31,22 @@ const fetchCourses = useFetchCourseStore((state) => state.fetchCourses);
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {displayedCourses.length > 0 ? (
-            displayedCourses.map((course, index) => (
-              <CourseCard key={index} {...course} />
+            displayedCourses.map((course: any, index) => (
+              <CourseCard
+                key={index}
+                title={course.title}
+                subtitle={course.category || "General"}
+                instructor={course.instructor?.name || "Unknown Instructor"}
+                originalPrice={course.originalPrice}
+                discountPercent={course.discountPercent}
+                finalPrice={course.finalPrice ?? course.originalPrice}
+                duration={course.duration || "5h 30m"}
+                lessons={course.chapters?.length || 0}
+                certificate={course.certificate || false}
+                thumbnail={course.thumbnail || ""}
+                logo={course.logo || "/logo.png"}
+                slug={course.slug}
+              />
             ))
           ) : (
             <div>No courses available</div>

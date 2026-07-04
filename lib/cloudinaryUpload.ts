@@ -9,7 +9,7 @@ export async function uploadToCloudinary(filePath: string, folder: string): Prom
 
     return result.secure_url 
   } catch (error) {
-    // console.error('Error uploading to Cloudinary:', error)
-    console.log('Error uploading file to :',error)
+    console.error('Error uploading file to Cloudinary:', error);
+    throw error;
   }
 }

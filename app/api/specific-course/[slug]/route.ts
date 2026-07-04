@@ -1,14 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongoose";
-import User from "@/models/User";
+import User from "@/models/user";
 import Enrollment from "@/models/enrollment.model";
 import Course from "@/models/Course/course";
-export async function GET(req: NextRequest, context: any
- 
+
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   await connectDB();
 
-  const slug = context.params.slug;
+  const { slug } = await params;
   const clerkId = req.nextUrl.searchParams.get("clerkId");
 
   if (!clerkId) {

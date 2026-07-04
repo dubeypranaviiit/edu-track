@@ -2,10 +2,16 @@ import { connectDB } from "@/lib/mongoose";
 import Chapter from "@/models/Course/chapter";
 import Subtopic from "@/models/Course/subTopic";
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
+
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+    }
 
     const { chapterId, title } = await req.json();
 

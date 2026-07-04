@@ -3,11 +3,12 @@ import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-export async function GET(req: Request, context: any
-
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ sessionId: string }> }
 ) {
   try {
-    const { sessionId } = context.params;
+    const { sessionId } = await params;
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
     return NextResponse.json(session);

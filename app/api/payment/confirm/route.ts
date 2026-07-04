@@ -1,47 +1,57 @@
 import { NextRequest, NextResponse } from "next/server";
+import { connectDB } from "@/lib/mongoose";
 import Enrollment from "@/models/enrollment.model";
-import User from "@/models/User"; 
-import Course from "@/models/Course/course" 
+import User from "@/models/user";
 import Stripe from "stripe";
+
+import Course from "@/models/Course/course";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 export async function POST(req: NextRequest) {
   try {
+    await connectDB();
     const { sessionId } = await req.json();
 
     if (!sessionId) {
       return NextResponse.json({ success: false, message: "Missing session ID" }, { status: 400 });
     }
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
 
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
     const { courseId, userId } = session.metadata as any;
-    const amount = session.amount_total! / 100; 
+
     const user = await User.findOne({ clerkId: userId });
     if (!user) {
       return NextResponse.json({ success: false, message: "User not found" }, { status: 404 });
     }
-    const course = await Course.findById(courseId);
-    if (!course) {
-      return NextResponse.json({ success: false, message: "Course not found" }, { status: 404 });
-    }
-    const enrollment = await Enrollment.create({
-      user: user._id, 
-      course: course._id,
-      payment: {
-        amount,
-        currency: session.currency,
-        paymentId: session.payment_intent as string,
-        status: "paid",
-      },
+
+    let enrollment = await Enrollment.findOne({
+      user: user._id,
+      course: courseId,
     });
 
-    return NextResponse.json({ success: true, enrollment });
+    if (!enrollment && session.payment_status === "paid") {
+      enrollment = await Enrollment.create({
+        user: user._id,
+        course: courseId,
+        payment: {
+          amount: (session.amount_total || 0) / 100,
+          currency: session.currency,
+          paymentId: session.payment_intent as string,
+          status: "paid",
+        },
+        enrolledAt: new Date(),
+      });
+
+      await Course.findByIdAndUpdate(
+        courseId,
+        { $inc: { totalEnrollments: 1 } }
+      );
+    }
+
+    return NextResponse.json({ success: true, enrolled: !!enrollment });
   } catch (err) {
     console.error(err);
-    return NextResponse.json(
-      { success: false, message: "Enrollment creation failed", error: err },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, message: "Could not verify enrollment" }, { status: 500 });
   }
 }

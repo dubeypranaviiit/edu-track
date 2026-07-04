@@ -2,11 +2,11 @@ import { connectDB } from "@/lib/mongoose";
 import Chapter from "@/models/Course/chapter";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PATCH(req: NextRequest, context: any
-
-
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ chapterId: string }> }
 ) {
-  const { chapterId } = context.params;
+  const { chapterId } = await params;
   const { title } = await req.json();
 
   try {
@@ -21,10 +21,11 @@ export async function PATCH(req: NextRequest, context: any
   }
 }
 
-export async function DELETE(req: NextRequest,context: any
-
-  ) {
-  const { chapterId } = context.params;
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ chapterId: string }> }
+) {
+  const { chapterId } = await params;
 
   try {
     await connectDB();

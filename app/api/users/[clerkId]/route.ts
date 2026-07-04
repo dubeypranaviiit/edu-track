@@ -1,14 +1,16 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongoose";
-import User from "@/models/User";
+import User from "@/models/user";
+
 export async function GET(
-  req: NextRequest,context: any
-  // { params }: { params: { clerkId: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ clerkId: string }> }
 ) {
   try {
     await connectDB();
-    const user = await User.findOne({ clerkId: context.params.clerkId });
+    const { clerkId } = await params;
+    const user = await User.findOne({ clerkId });
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -22,15 +24,16 @@ export async function GET(
 }
 
 export async function PUT(
-  req: NextRequest,context: any
-  // { params }: { params: { clerkId: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ clerkId: string }> }
 ) {
   try {
     await connectDB();
+    const { clerkId } = await params;
     const data = await req.json();
 
     const updatedUser = await User.findOneAndUpdate(
-      { clerkId: context.params.clerkId },
+      { clerkId },
       { $set: data },
       { new: true, runValidators: true }
     );

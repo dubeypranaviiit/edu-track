@@ -31,7 +31,6 @@ const CourseManagementDashboard = () => {
     const fetchCourses = async () => {
       try {
         const res = await axios.get('/api/create-course');
-        console.log(res.data);
         setCourses(res.data.courses);
       } catch (err) {
         console.error('Failed to fetch courses:', err);

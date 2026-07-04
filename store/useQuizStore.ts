@@ -69,7 +69,7 @@ export const useQuizStore = create<QuizState>((set) => ({
   updateQuestion: (index, field, value) =>
     set((state) => {
       const updated = [...state.questions];
-      updated[index][field] = value;
+      (updated[index] as any)[field] = value;
       return { questions: updated };
     }),
 

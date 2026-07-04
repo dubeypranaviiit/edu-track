@@ -1,5 +1,4 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
-import { clerkClient } from '@clerk/clerk-sdk-node';
 import { NextResponse } from 'next/server';
 
 const isPublicRoute = createRouteMatcher([
@@ -7,17 +6,23 @@ const isPublicRoute = createRouteMatcher([
   '/about',
   '/contact',
   '/course',
+  '/course/(.*)',
   '/topic',
   '/sign-in(.*)',
+  '/api/create-course',
+  '/api/create-course/(.*)',
+  '/api/contact',
+  '/api/payment/webhook',
 ]);
 
 export default clerkMiddleware(async (authFn, req) => {
   // Allow public routes
   if (isPublicRoute(req)) return;
 
-  // ✅ Call the function to get session/userId
-
-  
+  const { userId } = await authFn();
+  if (!userId) {
+    return NextResponse.redirect(new URL('/sign-in', req.url));
+  }
 
   return NextResponse.next();
 });

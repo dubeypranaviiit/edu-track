@@ -1,6 +1,9 @@
 import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
 import Enrollment from "@/models/enrollment.model";
+import { connectDB } from "@/lib/mongoose";
+import Course from "@/models/Course/course";
+import User from "@/models/user";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -24,8 +27,25 @@ export async function POST(req: NextRequest) {
     const session = event.data.object as Stripe.Checkout.Session;
 
     try {
+      await connectDB();
+
+      const user = await User.findOne({ clerkId: session.metadata?.userId });
+      if (!user) {
+        console.error("User not found for clerkId:", session.metadata?.userId);
+        return NextResponse.json({ message: "User not found" }, { status: 404 });
+      }
+
+      const existingEnrollment = await Enrollment.findOne({
+        user: user._id,
+        course: session.metadata?.courseId,
+      });
+
+      if (existingEnrollment) {
+        return NextResponse.json({ received: true });
+      }
+
       await Enrollment.create({
-        user: session.metadata?.userId,
+        user: user._id,
         course: session.metadata?.courseId,
         payment: {
           amount: (session.amount_total || 0) / 100,
@@ -35,6 +55,12 @@ export async function POST(req: NextRequest) {
         },
         enrolledAt: new Date(),
       });
+
+      // Increment the totalEnrollments counter on the Course
+      await Course.findByIdAndUpdate(
+        session.metadata?.courseId,
+        { $inc: { totalEnrollments: 1 } }
+      );
     } catch (err) {
       console.error("Enrollment creation failed", err);
       return NextResponse.json({ message: "Enrollment creation failed" }, { status: 500 });

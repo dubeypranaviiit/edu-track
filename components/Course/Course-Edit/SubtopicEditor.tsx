@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import React, { useState } from 'react'
 import axios from 'axios'
@@ -9,28 +9,7 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { ChevronDown, ChevronRight, Edit, Trash2 } from 'lucide-react'
 import ItemEditor from './ItemEditor'
 import { updateSubtopic, deleteSubtopic } from '@/lib/api/subtopic'
-
-interface Item {
-  _id: string
-  title: string
-  type: 'video' | 'reading' | 'assignment'
-  content: string
-  uploadType?: 'upload' | 'url'
-  videoUrl?: string
-  resources?: string[]
-}
-
-interface Subtopic {
-  _id: string
-  title: string
-  items: Item[]
-}
-
-interface Chapter {
-  _id: string
-  title: string
-  subtopics: Subtopic[]
-}
+import { Chapter } from '@/types/course'
 
 interface Props {
   chapter: Chapter
@@ -148,3 +127,4 @@ const SubtopicEditor = ({ chapter, onUpdate }: Props) => {
 }
 
 export default SubtopicEditor
+

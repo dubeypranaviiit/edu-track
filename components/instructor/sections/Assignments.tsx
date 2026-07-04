@@ -10,7 +10,15 @@ export default function AddAssignmentForm() {
 
   const { courses, fetchCourses, loadingCourses } = useCourseStore();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    topic: string;
+    subtopic: string;
+    slug: string;
+    type: string;
+    textContent: string;
+    file: File | null;
+    course: string;
+  }>({
     topic: "",
     subtopic: "",
     slug: "",

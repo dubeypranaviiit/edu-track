@@ -72,7 +72,6 @@ const Submissions = () => {
   const handleSaveToDB = async (id: number, updatedData: Partial<Submission>) => {
     try {
       await axios.put(`/api/submissions/${id}`, updatedData);
-      console.log("Saved to DB:", updatedData);
     } catch (error) {
       console.error("Failed to save:", error);
     }

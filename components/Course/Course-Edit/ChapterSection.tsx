@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import React, { useState } from 'react'
 import axios from 'axios'
 import { Button } from '@/components/ui/button'
@@ -8,13 +8,8 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { ChevronDown, ChevronRight, Edit, Trash2 } from 'lucide-react'
 import SubtopicEditor from './SubtopicEditor'
 import { updateChapter, deleteChapter } from '@/lib/api/chapter'
+import { Chapter } from '@/types/course'
 
-interface Chapter {
-  _id: string
-  title: string
-  subtopics: string[]
-  course: string
-}
 
 interface Props {
   courseId: string
@@ -130,3 +125,4 @@ const ChapterSection = ({ courseId, chapters, onUpdate }: Props) => {
 }
 
 export default ChapterSection
+

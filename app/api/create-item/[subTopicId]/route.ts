@@ -3,11 +3,18 @@ import Subtopic from "@/models/Course/subTopic";
 import Item from "@/models/Course/item";
 import { NextRequest, NextResponse } from "next/server";
 import { uploadToCloudinary } from "@/lib/cloudinaryUpload";
+import { auth } from "@clerk/nextjs/server";
 
-export async function POST(req: NextRequest, context: any
-
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ subTopicId: string }> }
 ) {
-  const { subTopicId } = context.params;
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { subTopicId } = await params;
 
   try {
     await connectDB();

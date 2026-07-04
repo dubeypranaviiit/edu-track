@@ -3,11 +3,13 @@ import { connectDB } from '@/lib/mongoose';
 import Question from '@/models/Quiz/question';
 import Quiz from '@/models/Quiz/quiz';
 
-export async function PATCH(req: Request, context: any
+export async function PATCH(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
-    const { id } = context.params;
+    const { id } = await params;
     const data = await req.json();
 
     const question = await Question.findByIdAndUpdate(id, data, { new: true });
@@ -20,12 +22,13 @@ export async function PATCH(req: Request, context: any
   }
 }
 
-export async function DELETE(req: Request,context: any
-  //  { params }: { params: { id: string } }
-  ) {
+export async function DELETE(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     await connectDB();
-    const { id } = context.params;
+    const { id } = await params;
 
     const question = await Question.findByIdAndDelete(id);
     if (!question) return NextResponse.json({ message: 'Question not found' }, { status: 404 });

@@ -2,10 +2,11 @@ import { connectDB } from "@/lib/mongoose";
 import Subtopic from "@/models/Course/subTopic";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PATCH(req: NextRequest, context: any
-
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ subtopicId: string }> }
 ) {
-  const { subtopicId } = context.params;
+  const { subtopicId } = await params;
   const { title } = await req.json();
 
   try {
@@ -20,10 +21,11 @@ export async function PATCH(req: NextRequest, context: any
   }
 }
 
-export async function DELETE(req: NextRequest,context: any
-  //  { params }: { params: { subtopicId: string } }
-  ) {
-  const { subtopicId } = context.params;
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ subtopicId: string }> }
+) {
+  const { subtopicId } = await params;
 
   try {
     await connectDB();
