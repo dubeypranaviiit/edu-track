@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "EduTrack",
-  description: "created by Pranav",
+  description: "EduTrack – online learning platform for courses, quizzes and assignments.",
 };
 
 export default function RootLayout({

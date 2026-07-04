@@ -6,9 +6,8 @@ import Stripe from "stripe";
 
 import Course from "@/models/Course/course";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-
 export async function POST(req: NextRequest) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   try {
     await connectDB();
     const { sessionId } = await req.json();

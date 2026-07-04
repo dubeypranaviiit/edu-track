@@ -2,11 +2,15 @@ import { connectDB } from "@/lib/mongoose";
 import Item from "@/models/Course/item";
 import { NextRequest, NextResponse } from "next/server";
 import { uploadToCloudinary } from "@/lib/cloudinaryUpload";
+import { auth } from "@clerk/nextjs/server";
 
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ itemId: string }> }
 ) {
+  const { userId } = await auth();
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   const { itemId } = await params;
 
   try {
@@ -52,6 +56,9 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ itemId: string }> }
 ) {
+  const { userId } = await auth();
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   const { itemId } = await params;
 
   try {

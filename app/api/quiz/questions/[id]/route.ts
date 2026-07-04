@@ -2,11 +2,15 @@ import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongoose';
 import Question from '@/models/Quiz/question';
 import Quiz from '@/models/Quiz/quiz';
+import { auth } from '@clerk/nextjs/server';
 
 export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { userId } = await auth();
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     await connectDB();
     const { id } = await params;
@@ -26,6 +30,9 @@ export async function DELETE(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { userId } = await auth();
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     await connectDB();
     const { id } = await params;

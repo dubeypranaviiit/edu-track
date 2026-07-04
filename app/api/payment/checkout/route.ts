@@ -4,9 +4,8 @@ import { connectDB } from "@/lib/mongoose";
 import User from "@/models/user";
 import Enrollment from "@/models/enrollment.model";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-
 export async function POST(req: NextRequest) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   try {
     await connectDB();
     const { courseId, userId, amount } = await req.json();

@@ -5,11 +5,10 @@ import { connectDB } from "@/lib/mongoose";
 import Course from "@/models/Course/course";
 import User from "@/models/user";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-
 export const config = { api: { bodyParser: false } };
 
 export async function POST(req: NextRequest) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   const buf = await req.arrayBuffer();
   const rawBody = Buffer.from(buf);
   const sig = req.headers.get("stripe-signature")!;
