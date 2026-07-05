@@ -6,6 +6,7 @@ import Chapter from "@/models/Course/chapter";
 import Subtopic from "@/models/Course/subTopic";
 import Item from "@/models/Course/item";
 import { connectDB } from "@/lib/mongoose";
+import "@/models/user";
 
 export async function GET(
   req: NextRequest,

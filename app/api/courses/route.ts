@@ -5,6 +5,7 @@ import User from "@/models/user";
 
 export async function GET() {
   await connectDB();
+  const _ = User; // Ensure User model is registered (prevents Webpack tree-shaking)
   try {
     const courses = await Course.find({ isPublished: true })
       .select("-chapters -reviews")
