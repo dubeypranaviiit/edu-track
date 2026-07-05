@@ -11,13 +11,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { UserButton, SignInButton, SignUpButton } from "@clerk/nextjs";
+import { UserButton, SignInButton, SignUpButton, useUser } from "@clerk/nextjs";
 
 const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const { profile, loading } = useUserStore(); 
+  const { isLoaded, isSignedIn } = useUser();
+  const { profile } = useUserStore(); 
   const role = profile?.role ?? "student"; 
 
   const renderLinks = () => {
@@ -26,28 +27,28 @@ const Header: React.FC = () => {
       { href: "/course", label: "Course" },
       { href: "/about", label: "About" },
       { href: "/contact", label: "Contact" },
-      { href: "/test", label: "Test" }, // special dropdown
+      { href: "/test", label: "Test" }, 
     ];
 
-    if (role === "admin") {
-      links.push({ href: "/admin/dashboard", label: "Dashboard" });
-      links.push({ href: "/admin/users", label: "Manage Users" });
-    } else if (role === "instructor") {
-      links.push({ href: "/instructor/dashboard", label: "Dashboard" });
-    } else {
-      links.push({ href: "/dashboard", label: "Dashboard" });
+    if (isSignedIn) {
+      if (profile) {
+        if (role === "admin") {
+          links.push({ href: "/admin", label: "Dashboard" });
+          links.push({ href: "/admin/users", label: "Manage Users" });
+        } else if (role === "instructor") {
+          links.push({ href: "/instructor/dashboard", label: "Dashboard" });
+        } else {
+          links.push({ href: "/dashboard", label: "Dashboard" });
+        }
+      } else {
+        links.push({ href: "/dashboard", label: "Dashboard" });
+      }
     }
 
     return links;
   };
 
   const links = renderLinks();
-
- if (loading) return (
-  <header className="h-16 bg-white shadow-sm flex items-center justify-center">
-    <span className="text-gray-400">Loading...</span>
-  </header>
-);
 
   return (
     <header className="bg-white shadow-sm relative z-50">
@@ -95,18 +96,19 @@ const Header: React.FC = () => {
               );
             })}
 
-         
-            {profile ? (
+            {!isLoaded ? (
+              <div className="w-10 h-10 bg-gray-200 animate-pulse rounded-full" />
+            ) : isSignedIn ? (
               <UserButton afterSignOutUrl="/" />
             ) : (
               <div className="flex gap-4">
                 <SignInButton mode="modal">
-                  <button className="bg-blue-600 text-white px-4 py-2 rounded-lg">
+                  <button className="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer">
                     Login
                   </button>
                 </SignInButton>
                 <SignUpButton mode="modal">
-                  <button className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg">
+                  <button className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg cursor-pointer">
                     Sign Up
                   </button>
                 </SignUpButton>
@@ -114,7 +116,6 @@ const Header: React.FC = () => {
             )}
           </nav>
 
-       
           <button
             className="md:hidden text-gray-700 focus:outline-none"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -166,8 +167,10 @@ const Header: React.FC = () => {
             );
           })}
 
-          {profile ? (
-            <UserButton />
+          {!isLoaded ? (
+            <div className="w-full h-10 bg-gray-200 animate-pulse rounded-lg" />
+          ) : isSignedIn ? (
+            <UserButton afterSignOutUrl="/" />
           ) : (
             <div className="space-y-2 cursor-pointer">
               <SignInButton mode="modal">
@@ -176,7 +179,7 @@ const Header: React.FC = () => {
                 </button>
               </SignInButton>
               <SignUpButton mode="modal">
-                <button className="w-full border border-blue-600 text-blue-600 py-2 rounded-lg">
+                <button className="w-full border border-blue-600 text-blue-600 py-2 rounded-lg cursor-pointer">
                   Sign Up
                 </button>
               </SignUpButton>
@@ -189,4 +192,3 @@ const Header: React.FC = () => {
 };
 
 export default Header;
-

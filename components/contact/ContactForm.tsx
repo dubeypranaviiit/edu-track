@@ -41,7 +41,7 @@ const ContactForm = () => {
   return (
     <section className="bg-white py-20 px-6">
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12">
-        {/* Left Content */}
+        {}
         <div className="flex flex-col justify-center">
           <h2 className="text-4xl font-bold text-gray-900 mb-4">Let’s Connect</h2>
           <p className="text-gray-600 text-lg leading-relaxed">
@@ -51,9 +51,9 @@ const ContactForm = () => {
           </p>
         </div>
 
-        {/* Right Form */}
+        {}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Name */}
+          {}
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-800 mb-1">
               Full Name <span className="text-red-500">*</span>
@@ -69,7 +69,7 @@ const ContactForm = () => {
             />
           </div>
 
-          {/* Email */}
+          {}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-800 mb-1">
               Email Address <span className="text-red-500">*</span>
@@ -85,7 +85,7 @@ const ContactForm = () => {
             />
           </div>
 
-          {/* Phone */}
+          {}
           <div>
             <label htmlFor="phone" className="block text-sm font-medium text-gray-800 mb-1">
               Phone Number (Optional)
@@ -100,7 +100,7 @@ const ContactForm = () => {
             />
           </div>
 
-          {/* Preferred Contact Method */}
+          {}
           <div>
             <label htmlFor="method" className="block text-sm font-medium text-gray-800 mb-1">
               Preferred Contact Method <span className="text-red-500">*</span>
@@ -121,7 +121,7 @@ const ContactForm = () => {
             </select>
           </div>
 
-          {/* Message */}
+          {}
           <div>
             <label htmlFor="message" className="block text-sm font-medium text-gray-800 mb-1">
               Your Message
@@ -136,7 +136,7 @@ const ContactForm = () => {
             />
           </div>
 
-          {/* Submit Button */}
+          {}
           <button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-semibold transition"

@@ -40,6 +40,11 @@ export default function CreateQuiz() {
       const totalQuestions = questions.length;
 
     
+      if (passingMarks < 0 || passingMarks > 100) {
+        alert(`Passing marks must be a percentage between 0% and 100%.`);
+        return;
+      }
+
       const quizRes = await axios.post('/quiz', {
         title,
         slug: slugify(title, { lower: true, strict: true }),
@@ -96,8 +101,8 @@ export default function CreateQuiz() {
             <label>Max Attempts:
             <Input type="number" placeholder="Max Attempts" value={maxAttempts} onChange={(e) => setMaxAttempts(+e.target.value)} required />
               </label>
-                 <label>Passing Marks:
-            <Input type="number" placeholder="Passing Marks" value={passingMarks} onChange={(e) => setPassingMarks(+e.target.value)} />
+                  <label>Passing Percentage (%):
+             <Input type="number" min={0} max={100} placeholder="Passing Percentage (e.g. 50)" value={passingMarks} onChange={(e) => setPassingMarks(+e.target.value)} required />
                </label>
           </div>
 

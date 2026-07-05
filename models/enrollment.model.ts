@@ -1,4 +1,4 @@
-// models/Enrollment.ts
+
 import { Schema, model, models } from "mongoose";
 
 const EnrollmentSchema = new Schema(
@@ -8,7 +8,7 @@ const EnrollmentSchema = new Schema(
     payment: {
       amount: { type: Number, required: true },
       currency: { type: String, default: "INR" },
-      paymentId: { type: String }, // Stripe payment ID
+      paymentId: { type: String }, 
       status: { type: String, enum: ["pending", "paid", "failed"], default: "pending" },
     },
     enrolledAt: { type: Date, default: Date.now },

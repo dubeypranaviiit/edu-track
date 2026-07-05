@@ -26,7 +26,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing quizId or userId" }, { status: 400 });
     }
 
-    // Verify user owns the submission identity
+    
     const currentUser = await User.findOne({ clerkId });
     if (!currentUser || currentUser._id.toString() !== userId) {
       return NextResponse.json({ error: "Forbidden: User identity mismatch" }, { status: 403 });
@@ -39,7 +39,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // Enforce maxAttempts check
+    
     const quiz = await Quiz.findById(quizId).select("maxAttempts passingMarks");
     if (!quiz) {
       return NextResponse.json({ error: "Quiz not found" }, { status: 404 });

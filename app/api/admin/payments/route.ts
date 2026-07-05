@@ -3,7 +3,7 @@ import { connectDB } from "@/lib/mongoose";
 import Enrollment from "@/models/enrollment.model";
 import { requireRole } from "@/lib/auth/requireRole";
 
-// Pre-load referenced models so Mongoose doesn't throw Schema errors during populate
+
 import "@/models/user";
 import "@/models/Course/course";
 

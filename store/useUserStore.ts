@@ -18,6 +18,8 @@ export interface UserProfile {
   dateOfBirth?: string;
   socialLinks?: SocialLinks;
   role?: "student" | "instructor" | "admin";
+  instructorStatus?: "none" | "pending" | "approved" | "rejected";
+  isActive?: boolean;
 }
 interface UserStore {
   profile: UserProfile | null;

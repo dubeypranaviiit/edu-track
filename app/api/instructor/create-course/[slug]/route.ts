@@ -84,12 +84,12 @@ export async function DELETE(
       return NextResponse.json({ message: "Course not found" }, { status: 404 });
     }
 
-    // Verify course ownership
+    
     if (course.instructor.toString() !== user._id.toString() && user.role !== "admin") {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
     }
 
-    // Delete all nested items, subtopics, chapters, then the course
+    
     for (const chapter of (course.chapters as any[] || [])) {
       for (const subtopic of (chapter.subtopics as any[] || [])) {
         await Item.deleteMany({ _id: { $in: subtopic.items } });
@@ -140,7 +140,7 @@ export async function PUT(
       return NextResponse.json({ message: 'Course not found' }, { status: 404 });
     }
 
-    // Verify course ownership
+    
     if (course.instructor.toString() !== user._id.toString() && user.role !== "admin") {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
     }
@@ -188,7 +188,7 @@ export async function PATCH(
       return NextResponse.json({ message: "Course not found" }, { status: 404 });
     }
 
-    // Verify course ownership
+    
     if (course.instructor.toString() !== user._id.toString() && user.role !== "admin") {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
     }

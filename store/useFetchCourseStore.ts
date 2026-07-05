@@ -36,8 +36,8 @@ interface CourseStore {
   loadingEnrolled: boolean;
   errorCourses: string | null;
   errorEnrolled: string | null;
-  lastFetchedCourses: number | null; // timestamp for courses cache
-  lastFetchedEnrolled: number | null; // timestamp for enrolled cache
+  lastFetchedCourses: number | null; 
+  lastFetchedEnrolled: number | null; 
 
   fetchCourses: () => Promise<void>;
   fetchEnrolledCourses: (userId: string) => Promise<void>;
@@ -59,7 +59,7 @@ export const useFetchCourseStore = create<CourseStore>((set, get) => ({
     const now = Date.now();
     const lastFetched = get().lastFetchedCourses;
 
-    // If cache exists and is less than 10 minutes old, return early
+    
     if (lastFetched && now - lastFetched < 10 * 60 * 1000) return;
 
     set({ loadingCourses: true, errorCourses: null });
@@ -80,7 +80,7 @@ export const useFetchCourseStore = create<CourseStore>((set, get) => ({
     const now = Date.now();
     const lastFetched = get().lastFetchedEnrolled;
 
-    // If cache exists and is less than 10 minutes old, return early
+    
     if (lastFetched && now - lastFetched < 10 * 60 * 1000) return;
 
     set({ loadingEnrolled: true, errorEnrolled: null });

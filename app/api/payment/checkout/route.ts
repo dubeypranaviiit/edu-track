@@ -19,6 +19,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
+    if (user.role === "instructor") {
+      return NextResponse.json({ message: "Instructors cannot enroll in courses" }, { status: 400 });
+    }
+
     const existingEnrollment = await Enrollment.findOne({
       user: user._id,
       course: courseId,
@@ -36,7 +40,7 @@ export async function POST(req: NextRequest) {
           price_data: {
             currency: "INR",
             product_data: { name: "Course Enrollment" },
-            unit_amount: Math.round(amount * 100), // in paise
+            unit_amount: Math.round(amount * 100), 
           },
           quantity: 1,
         },

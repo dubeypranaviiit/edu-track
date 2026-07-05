@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Course not found" }, { status: 404 });
     }
 
-    // Verify ownership
+    
     if (course.instructor.toString() !== user._id.toString() && user.role !== "admin") {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
     }

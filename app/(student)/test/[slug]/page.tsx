@@ -46,7 +46,7 @@ export default function ExamPage() {
   const [score, setScore] = useState<number | null>(null);
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
 
-  //   Fetch quiz
+  
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
@@ -62,7 +62,7 @@ export default function ExamPage() {
     if (slug) fetchQuiz();
   }, [slug]);
 
-  //   Timer
+  
   useEffect(() => {
     if (!quiz || submitted) return;
     const timer = setInterval(() => {
@@ -78,7 +78,7 @@ export default function ExamPage() {
     return () => clearInterval(timer);
   }, [quiz, submitted]);
 
-  //  Track time spent per question
+  
   const updateTimeSpent = (questionId: string) => {
     setAnswers((prev) => {
       const prevData = prev[questionId] || {};
@@ -92,7 +92,7 @@ export default function ExamPage() {
     });
   };
 
-  //  Handle answer selection
+  
   const handleSelect = (questionId: string, optionIndex: number) => {
     if (submitted) return;
     updateTimeSpent(questionId);
@@ -103,7 +103,7 @@ export default function ExamPage() {
     setQuestionStartTime(Date.now());
   };
 
-  //  Mark for review
+  
   const toggleReview = (questionId: string) => {
     setAnswers((prev) => ({
       ...prev,
@@ -111,7 +111,7 @@ export default function ExamPage() {
     }));
   };
 
-  //  Navigate
+  
   const next = () => {
     updateTimeSpent(quiz!.questions[currentIndex]._id);
     setQuestionStartTime(Date.now());
@@ -123,7 +123,7 @@ export default function ExamPage() {
     if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
   };
 
-  //   Submit
+  
   const handleSubmit = async () => {
     if (!quiz || !profile?._id || submitted) return;
     updateTimeSpent(quiz.questions[currentIndex]._id);
@@ -145,7 +145,7 @@ export default function ExamPage() {
         answers: answerArray,
         timeTaken: totalTimeTaken,
       });
-      // Redirect to the detailed results page
+      
       router.push(`/results/${res.data._id}`);
     } catch (err) {
       console.error("Error submitting quiz:", err);
@@ -219,7 +219,7 @@ export default function ExamPage() {
           </Button>
         </div>
 
-        {/* Question navigation bullets */}
+        {}
         <div className="flex flex-wrap gap-2 mt-6">
           {quiz.questions.map((q, i) => {
             const status = answers[q._id]?.markedForReview
@@ -256,7 +256,7 @@ export default function ExamPage() {
           <div className="mt-6 text-center">
             <h2 className="text-xl font-bold">
               Final Score:{" "}
-              <span className={score! >= quiz.passingMarks ? "text-green-600" : "text-red-600"}>
+              <span className={score! >= (quiz.passingMarks / 100) * quiz.totalMarks ? "text-green-600" : "text-red-600"}>
                 {score} / {quiz.totalMarks}
               </span>
             </h2>

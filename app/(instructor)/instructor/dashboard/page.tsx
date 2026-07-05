@@ -8,7 +8,7 @@ import Courses from "@/components/instructor/sections/Courses";
 import Assignments from "@/components/instructor/sections/Assignments";
 import Submissions from "@/components/instructor/sections/Submissions";
 import QuestionsForm from "@/components/exam-create/QuestionsForm";
-// import Grading from "@/components/instructor/sections/Grading";
+
 import { FaBook, FaClipboardList,FaBookOpen, FaInbox, FaGraduationCap,FaRegClipboard, FaListUl, } from "react-icons/fa";
 import CourseBuilder from "@/components/instructor/sections/CourseBuilder";
 import TestManagementDashboard from "@/components/exam-create/TestManagementDashboard";
@@ -17,7 +17,7 @@ const navItems = [
   { id: "courses", icon: FaBook, label: "Create Course" },
   { id: "all-courses", icon: FaBookOpen, label: "All Courses" },
   { id: "create-test", icon: FaRegClipboard, label: "Create Test" },
-  { id: "all-tests", icon: FaListUl, label: "All Tests" }, // Added
+  { id: "all-tests", icon: FaListUl, label: "All Tests" }, 
   { id: "assignments", icon: FaClipboardList, label: "Assignments" },
   { id: "submissions", icon: FaInbox, label: "Submissions" },
 ];
@@ -39,7 +39,7 @@ const DashboardPage = () => {
   }
 
   if (profile.role !== "instructor" && profile.role !== "admin") {
-    return null; // redirect in progress
+    return null; 
   }
 
   return (
@@ -53,7 +53,7 @@ const DashboardPage = () => {
           navItems={navItems}
         />
         <div className="flex-1 h-screen flex flex-col">
-          {/* <Header role={"Instructor"} /> */}
+          {}
           <main className="p-4 overflow-auto flex-1">
             {activeSection === "courses" && <CourseBuilder/>}
             {activeSection === "create-test" && <QuestionsForm/>}
@@ -61,7 +61,7 @@ const DashboardPage = () => {
             {activeSection === "submissions" && <Submissions />}
             {activeSection === "all-tests" && <TestManagementDashboard/>}
             {activeSection === "all-courses" && <CourseManagementDashboard/>}
-            {/* {activeSection === "grading" && <Grading />} */}
+            {}
           </main>
         </div>
       </div>

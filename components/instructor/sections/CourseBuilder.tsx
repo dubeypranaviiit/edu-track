@@ -76,7 +76,7 @@ export default function CourseBuilder() {
       const res = await axios.post('/api/instructor/create-course', formData)
       alert('🎉 Course successfully created!')
 
-      // Reset form
+      
       setCourseData({
         title: '',
         slug: '',

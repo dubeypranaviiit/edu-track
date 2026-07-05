@@ -2,11 +2,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
- // your store for courses
-import useInstructorId from "@/lib/hooks/useInstructorId"; // custom hook
+ 
+import useInstructorId from "@/lib/hooks/useInstructorId"; 
 import { useCourseStore } from "@/store/useCourseStore";
 export default function AddAssignmentForm() {
-  const instructorId = useInstructorId(); // get logged-in instructor ID directly
+  const instructorId = useInstructorId(); 
 
   const { courses, fetchCourses, loadingCourses } = useCourseStore();
 
@@ -30,7 +30,7 @@ export default function AddAssignmentForm() {
 
   const [loading, setLoading] = useState(false);
 
-  // Fetch courses for this instructor
+  
   useEffect(() => {
     if (instructorId) fetchCourses(instructorId);
   }, [instructorId, fetchCourses]);
@@ -39,7 +39,7 @@ export default function AddAssignmentForm() {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
 
-    // Auto-find course ID if slug matches
+    
     if (name === "slug") {
       const course = courses.find(c => c.slug === value);
       if (course) setFormData(prev => ({ ...prev, course: course._id }));
@@ -63,7 +63,7 @@ export default function AddAssignmentForm() {
       data.append("subtopic", formData.subtopic);
       data.append("type", formData.type);
       data.append("course", formData.course);
-      data.append("instructor", instructorId); // sent as uploadedBy
+      data.append("instructor", instructorId); 
       if (formData.type === "text") data.append("textContent", formData.textContent);
       if (formData.type === "file" && formData.file) data.append("file", formData.file);
 
@@ -93,7 +93,7 @@ export default function AddAssignmentForm() {
       <h2 className="text-2xl font-bold mb-4">Create Assignment</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Topic */}
+        {}
         <div>
           <label>Topic</label>
           <input
@@ -107,7 +107,7 @@ export default function AddAssignmentForm() {
           />
         </div>
 
-        {/* Subtopic */}
+        {}
         <div>
           <label>Subtopic</label>
           <input
@@ -120,7 +120,7 @@ export default function AddAssignmentForm() {
           />
         </div>
 
-        {/* Slug */}
+        {}
         <div>
           <label>Course Slug</label>
           <input
@@ -134,7 +134,7 @@ export default function AddAssignmentForm() {
           />
         </div>
 
-        {/* Type */}
+        {}
         <div>
           <label>Type</label>
           <select
@@ -148,7 +148,7 @@ export default function AddAssignmentForm() {
           </select>
         </div>
 
-        {/* Text Content */}
+        {}
         {formData.type === "text" && (
           <div>
             <label>Text Content</label>
@@ -164,7 +164,7 @@ export default function AddAssignmentForm() {
           </div>
         )}
 
-        {/* File Upload */}
+        {}
         {formData.type === "file" && (
           <div>
             <label>Upload File</label>

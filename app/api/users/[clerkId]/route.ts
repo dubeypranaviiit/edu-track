@@ -39,7 +39,7 @@ export async function PUT(
 
     const data = await req.json();
 
-    // Strip protected fields so users cannot update their own role, status, or IDs
+    
     delete data.role;
     delete data.isActive;
     delete data.clerkId;

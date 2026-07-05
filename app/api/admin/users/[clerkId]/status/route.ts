@@ -31,7 +31,7 @@ export async function PATCH(
     targetUser.isActive = isActive;
     await targetUser.save();
 
-    // Log admin action
+    
     await AdminAction.create({
       admin: authResult.user._id,
       action: isActive ? "reactivate_user" : "suspend_user",

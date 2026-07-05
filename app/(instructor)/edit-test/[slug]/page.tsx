@@ -30,9 +30,9 @@ export default function page() {
     const fetchQuiz = async () => {
         if (!slug) return;
       try {
-        const res = await axios.get(`/test-create/${slug}`);
-        setQuiz(res.data.quiz);
-        setQuestions(res.data.quiz.questions || []);
+        const res = await axios.get(`/quiz/${slug}`);
+        setQuiz(res.data);
+        setQuestions(res.data.questions || []);
       } catch (err) {
         console.error('Failed to fetch quiz:', err);
       } finally {
@@ -89,10 +89,15 @@ export default function page() {
     try {
       const totalMarks = questions.reduce((sum, q) => sum + q.marks, 0);
 
-      await axios.put(`/test-create/${slug}`, {
+      if (quiz.passingMarks < 0 || quiz.passingMarks > 100) {
+        alert(`Passing marks must be a percentage between 0% and 100%.`);
+        return;
+      }
+
+      await axios.put(`/quiz/${slug}`, {
         ...quiz,
         totalMarks,
-        TotalQuestion: questions.length,
+        totalQuestions: questions.length,
         questions,
       });
 
@@ -122,8 +127,19 @@ export default function page() {
           <Label>Total Marks</Label>
           <Input
             type="number"
-            value={quiz.totalMarks}
-            onChange={(e) => handleQuizChange('totalMarks', +e.target.value)}
+            value={questions.reduce((sum, q) => sum + q.marks, 0)}
+            readOnly
+            className="bg-gray-100 cursor-not-allowed"
+          />
+        </div>
+        <div>
+          <Label>Passing Percentage (%)</Label>
+          <Input
+            type="number"
+            min={0}
+            max={100}
+            value={quiz.passingMarks || 0}
+            onChange={(e) => handleQuizChange('passingMarks', +e.target.value)}
           />
         </div>
         <div>
@@ -132,6 +148,7 @@ export default function page() {
             type="number"
             value={questions.length}
             readOnly
+            className="bg-gray-100 cursor-not-allowed"
           />
         </div>
         <div>

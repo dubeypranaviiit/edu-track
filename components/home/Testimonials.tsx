@@ -61,13 +61,7 @@ const Testimonials: React.FC = () => {
           {testimonials.map((testimonial, index) => (
             <SwiperSlide key={index}>
               <div className="bg-white p-8 rounded-2xl shadow-xl text-center">
-                {/* <Image
-                  src={testimonial.image}
-                  alt={testimonial.name}
-                  width={80}
-                  height={80}
-                  className="rounded-full mx-auto mb-4 object-cover"
-                /> */}
+                {}
                 <h4 className="font-bold text-xl text-blue-600">{testimonial.name}</h4>
                 <p className="text-sm text-gray-500 mb-3">{testimonial.role}</p>
                 <p className="text-gray-700 mb-5 leading-relaxed italic">

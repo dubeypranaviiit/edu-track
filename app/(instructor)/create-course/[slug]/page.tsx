@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Course } from '@/types/course'
-import ChapterSection from '@/components/course/Course-Edit/ChapterSection'
+import ChapterSection from '@/components/course/course-edit/ChapterSection'
 import { useParams } from 'next/navigation'
 
 const Page = () => {

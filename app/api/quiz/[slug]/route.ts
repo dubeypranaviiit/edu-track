@@ -96,3 +96,55 @@ export async function DELETE(req: Request, { params }: QuizRouteContext) {
     );
   }
 }
+
+export async function PUT(req: Request, { params }: QuizRouteContext) {
+  const { userId } = await auth();
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  try {
+    await connectDB();
+    const currentUser = await User.findOne({ clerkId: userId });
+    if (!currentUser || (currentUser.role !== "instructor" && currentUser.role !== "admin")) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const { slug } = await params;
+    const body = await req.json();
+    const { title, description, duration, totalMarks, maxAttempts, passingMarks, questions } = body;
+
+    if (passingMarks !== undefined && (passingMarks < 0 || passingMarks > 100)) {
+      return NextResponse.json({ error: "Passing marks must be a percentage between 0 and 100" }, { status: 400 });
+    }
+
+    const quiz = await Quiz.findOneAndUpdate(
+      { slug },
+      { title, description, duration, totalMarks, maxAttempts, passingMarks },
+      { new: true }
+    );
+
+    if (!quiz) {
+      return NextResponse.json({ error: "Quiz not found" }, { status: 404 });
+    }
+
+    
+    await Question.deleteMany({ quiz: quiz._id });
+
+    
+    const questionIds = await Promise.all(
+      questions.map(async (q: any) => {
+        const { _id, ...cleanedQ } = q;
+        const createdQuestion = await Question.create({ ...cleanedQ, quiz: quiz._id });
+        return createdQuestion._id;
+      })
+    );
+
+    quiz.questions = questionIds;
+    quiz.totalQuestions = questionIds.length;
+    await quiz.save();
+
+    return NextResponse.json({ quiz });
+  } catch (error) {
+    console.error("Failed to update quiz:", error);
+    return NextResponse.json({ error: "Failed to update quiz", details: (error as Error).message }, { status: 500 });
+  }
+}

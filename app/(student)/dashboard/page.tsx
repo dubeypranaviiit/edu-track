@@ -34,14 +34,14 @@ const DashboardPage = () => {
           navItems={navItems}
         />
         <div className="flex-1 h-screen flex flex-col">
-          {/* <Header role={"Student"} /> */}
+          {}
           <main className="p-4 overflow-auto flex-1">
             {activeSection === "courses" && <CourseDashboard />}
             {activeSection === "enrolled" && <EnrolledCourse />}
             {activeSection === "results" && <ResultsPage />}
             {activeSection === "assignment" && <Assignments />}
             {activeSection === "submissions" && <Submissions />}
-            {/* {activeSection === "grading" && <Grading />} */}
+            {}
             {activeSection === "profile" && <StudentProfile />}
           </main>
         </div>

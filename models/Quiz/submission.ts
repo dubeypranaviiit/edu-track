@@ -39,8 +39,8 @@ const submissionSchema = new Schema<SubmissionDocument>(
   { timestamps: true }
 );
 
-submissionSchema.index({ quiz: 1, user: 1 }); // quick lookup per user per quiz
-submissionSchema.index({ user: 1, attemptedAt: -1 }); // quick results list sorting
+submissionSchema.index({ quiz: 1, user: 1 }); 
+submissionSchema.index({ user: 1, attemptedAt: -1 }); 
 
 export default mongoose.models.Submission ||
   mongoose.model<SubmissionDocument>("Submission", submissionSchema);

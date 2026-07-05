@@ -29,7 +29,7 @@ const page = () => {
   const { user } = useUser();
   const [editMode, setEditMode] = useState(false);
   const [profileImage, setProfileImage] = useState(""
-    // 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+    
   );
 
   const [userData, setUserData] = useState<UserData>({
@@ -59,7 +59,7 @@ const page = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setEditMode(false);
-    // You can add PUT request here to save changes
+    
   };
 
   return (
@@ -69,7 +69,7 @@ const page = () => {
           <h1 className="text-3xl font-bold text-gray-800 mb-8">Teacher Profile</h1>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Left Profile Card */}
+            {}
             <div className="bg-white shadow-md rounded-2xl p-6">
               <div className="relative w-36 h-36 mx-auto mb-6">
                 <Image
@@ -103,7 +103,7 @@ const page = () => {
               </div>
             </div>
 
-            {/* Right Info Form */}
+            {}
             <div className="md:col-span-2 bg-white shadow-md rounded-2xl p-6">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-semibold text-gray-800">Professional Information</h3>

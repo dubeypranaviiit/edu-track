@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
         enrolledAt: new Date(),
       });
 
-      // Increment the totalEnrollments counter on the Course
+      
       await Course.findByIdAndUpdate(
         session.metadata?.courseId,
         { $inc: { totalEnrollments: 1 } }

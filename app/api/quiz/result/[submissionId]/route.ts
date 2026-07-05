@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongoose";
 import Submission from "@/models/Quiz/submission";
-import Quiz from "@/models/Quiz/quiz"; // Import to ensure schema registration for populate
-import Question from "@/models/Quiz/question"; // Import to ensure schema registration for populate
+import Quiz from "@/models/Quiz/quiz"; 
+import Question from "@/models/Quiz/question"; 
 import { auth } from "@clerk/nextjs/server";
 
 export async function GET(

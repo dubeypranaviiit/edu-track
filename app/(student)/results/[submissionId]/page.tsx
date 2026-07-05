@@ -82,7 +82,8 @@ export default function ResultDetailPage() {
   }
 
   const { quiz, answers, score, timeTaken, attemptedAt } = submission;
-  const passed = score >= quiz.passingMarks;
+  const passingScore = (quiz.passingMarks / 100) * quiz.totalMarks;
+  const passed = score >= passingScore;
   const correct = answers.filter((a) => a.isCorrect).length;
   const wrong = answers.filter(
     (a) => !a.isCorrect && a.selectedOptionIndex !== null
@@ -114,7 +115,7 @@ export default function ResultDetailPage() {
 
   return (
     <div className="max-w-4xl mx-auto p-4 md:p-6">
-      {/* Back button */}
+      {}
       <motion.button
         whileHover={{ x: -4 }}
         onClick={() => router.back()}
@@ -123,7 +124,7 @@ export default function ResultDetailPage() {
         <ArrowLeft size={16} /> Back to Dashboard
       </motion.button>
 
-      {/* Header Card */}
+      {}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -156,12 +157,14 @@ export default function ResultDetailPage() {
           </div>
           <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
             <p className="text-2xl md:text-3xl font-black">{passed ? "PASS" : "FAIL"}</p>
-            <p className="text-xs text-white/80 font-bold uppercase mt-1">Required: {quiz.passingMarks}</p>
+            <p className="text-xs text-white/80 font-bold uppercase mt-1">
+              Required: {quiz.passingMarks}% ({passingScore.toFixed(1)} Marks)
+            </p>
           </div>
         </div>
       </motion.div>
 
-      {/* Breakdown Metrics */}
+      {}
       <div className="grid grid-cols-3 gap-4 mb-8">
         <motion.div 
           whileHover={{ scale: 1.02 }}
@@ -189,7 +192,7 @@ export default function ResultDetailPage() {
         </motion.div>
       </div>
 
-      {/* Filter Tabs */}
+      {}
       <div className="flex gap-2 p-1 bg-gray-100 dark:bg-gray-800 rounded-xl mb-6 overflow-x-auto">
         {(["all", "correct", "wrong", "skipped"] as const).map((f) => (
           <button
@@ -212,7 +215,7 @@ export default function ResultDetailPage() {
         ))}
       </div>
 
-      {/* Question Review List */}
+      {}
       <div className="space-y-6">
         <AnimatePresence mode="popLayout">
           {filteredAnswers.map((a, idx) => {
@@ -234,7 +237,7 @@ export default function ResultDetailPage() {
                     : "border-red-200/80 dark:border-red-900/50 bg-red-50/10"
                 }`}
               >
-                {/* Question Header */}
+                {}
                 <div className="flex items-start gap-4 mb-4">
                   <span
                     className={`mt-0.5 flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold text-white shadow-sm ${
@@ -276,7 +279,7 @@ export default function ResultDetailPage() {
                   </div>
                 </div>
 
-                {/* Options List */}
+                {}
                 <div className="space-y-3 ml-0 md:ml-12 mt-4">
                   {q.options.map((opt, i) => {
                     const isCorrectOpt = i === q.correctOptionIndex;
@@ -310,7 +313,7 @@ export default function ResultDetailPage() {
                   })}
                 </div>
 
-                {/* Explanation */}
+                {}
                 {q.explanation && (
                   <motion.div 
                     initial={{ opacity: 0 }}

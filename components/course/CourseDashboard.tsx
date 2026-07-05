@@ -4,7 +4,7 @@ import CourseCard, { CourseCardProps } from "@/components/course/CourseCard";
 import { useFetchCourseStore } from "@/store/useFetchCourseStore";
 
 const CourseDashboard: React.FC = () => {
-  // Fetch state from store
+  
   const courses = useFetchCourseStore((state) => state.courses);
    const loadingCourses = useFetchCourseStore((state) => state.loadingCourses);
   const errorCourses = useFetchCourseStore((state) => state.errorCourses);
@@ -65,7 +65,7 @@ const CourseDashboard: React.FC = () => {
     if (sortBy === "priceLow") return a.finalPrice! - b.finalPrice!;
     if (sortBy === "priceHigh") return b.finalPrice! - a.finalPrice!;
     if (sortBy === "shortest") return parseDuration(a.duration) - parseDuration(b.duration);
-    if (sortBy === "newest") return 0; // Replace with createdAt if available
+    if (sortBy === "newest") return 0; 
     return 0;
   });
 
@@ -85,7 +85,7 @@ const CourseDashboard: React.FC = () => {
         Explore Our Courses
       </h1>
 
-      {/* Filters */}
+      {}
       <div className="flex flex-wrap gap-4 justify-between items-center mb-6">
         <input
           type="text"

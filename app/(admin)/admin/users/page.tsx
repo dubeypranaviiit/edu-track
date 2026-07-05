@@ -31,7 +31,7 @@ export default function AdminUsersPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // States for confirmation actions
+  
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
   const [actionType, setActionType] = useState<"suspend" | "activate" | "role_change" | null>(null);
@@ -134,7 +134,7 @@ export default function AdminUsersPage() {
               )}
             </DropdownMenuItem>
 
-            {/* Change role sub-actions */}
+            {}
             {["student", "instructor", "admin"].map((roleOpt) => {
               if (user.role === roleOpt) return null;
               return (

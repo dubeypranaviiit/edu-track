@@ -30,14 +30,14 @@ export async function PATCH(
     const oldRole = targetUser.role;
     targetUser.role = role;
     
-    // Auto-approve instructor status if role is set to instructor
+    
     if (role === "instructor" && targetUser.instructorStatus !== "approved") {
       targetUser.instructorStatus = "approved";
     }
     
     await targetUser.save();
 
-    // Log admin action
+    
     await AdminAction.create({
       admin: authResult.user._id,
       action: "role_change",

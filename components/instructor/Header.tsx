@@ -17,6 +17,4 @@ const Header: React.FC<HeaderProps> = ({ role}) => {
 };
 
 export default Header;
-{/* <div className="flex items-center space-x-4">
-<UserButton />
-</div> */}
+{}

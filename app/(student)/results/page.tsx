@@ -85,7 +85,7 @@ export default function ResultsPage() {
     );
   }
 
-  const passedCount = submissions.filter((s) => s.score >= (s.quiz?.passingMarks ?? 0)).length;
+  const passedCount = submissions.filter((s) => s.score >= ((s.quiz?.passingMarks ?? 0) / 100) * (s.quiz?.totalMarks ?? 100)).length;
   const failedCount = submissions.length - passedCount;
   const passRate = Math.round((passedCount / submissions.length) * 100);
 
@@ -98,7 +98,7 @@ export default function ResultsPage() {
         </div>
       </div>
 
-      {/* Summary Cards */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <motion.div 
           whileHover={{ y: -4 }}
@@ -148,14 +148,14 @@ export default function ResultsPage() {
         </motion.div>
       </div>
 
-      {/* History Title */}
+      {}
       <h2 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Attempt History</h2>
 
-      {/* Results List */}
+      {}
       <div className="space-y-4">
         {submissions.map((sub, index) => {
           const quiz = sub.quiz || { title: "Deleted Quiz", totalMarks: 100, passingMarks: 33 };
-          const passed = sub.score >= quiz.passingMarks;
+          const passed = sub.score >= (quiz.passingMarks / 100) * quiz.totalMarks;
           const correct = sub.answers ? sub.answers.filter((a) => a.isCorrect).length : 0;
           const totalQ = sub.answers ? sub.answers.length : 0;
           const pct = Math.round((sub.score / quiz.totalMarks) * 100);
@@ -168,7 +168,7 @@ export default function ResultsPage() {
               key={sub._id}
               className="border border-gray-100 dark:border-gray-700 rounded-2xl p-5 bg-white dark:bg-gray-800 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group"
             >
-              {/* Left Color Bar indicator */}
+              {}
               <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${passed ? "bg-green-500" : "bg-red-500"}`} />
 
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pl-3">

@@ -21,7 +21,7 @@ export default function AdminInstructorsPage() {
   const [requests, setRequests] = useState<RequestType[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // States for actions
+  
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState<RequestType | null>(null);
   const [actionType, setActionType] = useState<"approve" | "reject" | null>(null);

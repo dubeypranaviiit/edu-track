@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
     <footer className="bg-gray-900 text-white py-12">
       <div className="container mx-auto px-4 grid md:grid-cols-4 gap-8 text-center md:text-left">
         <div>
-          <h4 className="text-lg font-semibold mb-4">EduPro</h4>
+          <h4 className="text-lg font-semibold mb-4">EduTrack</h4>
           <p className="text-gray-400">Empowering learners and educators with cutting-edge tools, personalized learning, and community-driven progress.</p>
         </div>
         <div>
@@ -36,7 +36,7 @@ const Footer: React.FC = () => {
         </div>
       </div>
 
-      <div className="text-center text-gray-500 mt-8 text-sm">© 2025 EduPro. All rights reserved.</div>
+      <div className="text-center text-gray-500 mt-8 text-sm">© 2025 EduTrack. All rights reserved.</div>
     </footer>
   );
 };

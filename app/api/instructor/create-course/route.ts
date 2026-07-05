@@ -20,7 +20,7 @@ async function saveTempFile(file: File): Promise<string> {
 export async function POST(req: NextRequest) {
   await connectDB();
 
-  // Enforce role check
+  
   const authResult = await requireRole(["instructor", "admin"]);
   if ("error" in authResult) {
     return NextResponse.json({ success: false, error: authResult.error }, { status: authResult.status });
@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     const title = formData.get("title") as string;
     const slug = formData.get("slug") as string;
 
-    // Check slug uniqueness before trying to save
+    
     const existing = await Course.findOne({ slug });
     if (existing) {
       return NextResponse.json(
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     const discountPercent = Number(formData.get("discountPercent")) || 0;
     const clerkId = formData.get("instructor") as string;
 
-    // If admin, we can lookup instructor from the provided Clerk ID, otherwise default to the logged-in user
+    
     let instructorUser = user;
     if (user.role === "admin" && clerkId) {
       const found = await User.findOne({ clerkId });
@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
       logo: logoUrl,
       originalPrice,
       discountPercent,
-      instructor: instructorUser._id,   // use ObjectId, not the raw string
+      instructor: instructorUser._id,   
       category,
       level,
       duration,

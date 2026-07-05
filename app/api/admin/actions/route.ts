@@ -3,7 +3,7 @@ import { connectDB } from "@/lib/mongoose";
 import AdminAction from "@/models/adminAction";
 import { requireRole } from "@/lib/auth/requireRole";
 
-// Ensure referenced models are registered
+
 import "@/models/user";
 
 export async function GET(req: NextRequest) {

@@ -12,7 +12,7 @@ type Course = {
   description: string;
   originalPrice: number;
   discountPercent: number;
-  instructor: string;
+  instructor: string | { name: string; email: string; _id?: string };
   isPublished: boolean;
   totalEnrollment: number;
 };
@@ -91,7 +91,7 @@ const CourseManagementDashboard = () => {
 
   return (
     <div className="max-w-5xl mx-auto p-4">
-      {/* Search & Filter */}
+      {}
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
         <input
           type="text"
@@ -111,7 +111,7 @@ const CourseManagementDashboard = () => {
         </select>
       </div>
 
-      {/* Course Cards */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {paginatedCourses.map((course) => (
           <div
@@ -138,7 +138,11 @@ const CourseManagementDashboard = () => {
               </div>
               <div className="flex items-center gap-2">
                 <MdOutlineSchool className="text-blue-500" />
-                <span>{course.instructor}</span>
+                <span>
+                  {typeof course.instructor === 'object' && course.instructor
+                    ? course.instructor.name
+                    : course.instructor}
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <HiOutlineUsers className="text-blue-500" />
@@ -179,7 +183,7 @@ const CourseManagementDashboard = () => {
         ))}
       </div>
 
-      {/* Pagination */}
+      {}
       {totalPages > 1 && (
         <div className="flex justify-center mt-8 gap-2">
           {Array.from({ length: totalPages }).map((_, index) => (

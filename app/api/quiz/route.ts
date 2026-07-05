@@ -28,6 +28,9 @@ export async function POST(req: Request) {
     }
 
     const data = await req.json();
+    if (data.passingMarks !== undefined && (data.passingMarks < 0 || data.passingMarks > 100)) {
+      return NextResponse.json({ error: "Passing marks must be a percentage between 0 and 100" }, { status: 400 });
+    }
     const quiz = await Quiz.create(data);
     return NextResponse.json({ quiz });
   } catch (error) {

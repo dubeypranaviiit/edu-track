@@ -12,7 +12,7 @@ const loadingCourses = useFetchCourseStore((state) => state.loadingCourses);
 const errorCourses = useFetchCourseStore((state) => state.errorCourses);
 const fetchCourses = useFetchCourseStore((state) => state.fetchCourses);
 
-  // Fetch courses once on mount
+  
   useEffect(() => {
     fetchCourses();
   }, [fetchCourses]);

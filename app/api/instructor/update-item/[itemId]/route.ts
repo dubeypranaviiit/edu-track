@@ -22,7 +22,7 @@ export async function PATCH(
 
     const { itemId } = await params;
 
-    // Verify course ownership
+    
     const subtopic = await Subtopic.findOne({ items: itemId }).populate({
       path: "chapter",
       populate: { path: "course" }
@@ -88,7 +88,7 @@ export async function DELETE(
 
     const { itemId } = await params;
 
-    // Verify course ownership
+    
     const subtopic = await Subtopic.findOne({ items: itemId }).populate({
       path: "chapter",
       populate: { path: "course" }
@@ -103,7 +103,7 @@ export async function DELETE(
     const item = await Item.findByIdAndDelete(itemId);
     if (!item) return NextResponse.json({ message: "Item not found" }, { status: 404 });
 
-    // Also pull from subtopic items array
+    
     subtopic.items = subtopic.items.filter((id: any) => id.toString() !== itemId);
     await subtopic.save();
 

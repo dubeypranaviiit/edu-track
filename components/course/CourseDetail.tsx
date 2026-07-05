@@ -27,7 +27,7 @@ const CourseDetail = ({ course }: { course: any }) => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
-      {/* Hero */}
+      {}
       <div className="relative h-96 bg-gradient-to-r from-blue-900 to-gray-900">
         <div className="container mx-auto px-4 py-20">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">{course.title}</h1>

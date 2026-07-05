@@ -26,9 +26,9 @@ export async function POST(req: NextRequest) {
 
   try {
     const formData = await req.formData();
-    const uploadedBy = formData.get("instructor") as string; // MongoDB _id of instructor
+    const uploadedBy = formData.get("instructor") as string; 
 
-    // Check if user exists and has instructor/admin role
+    
     const currentUser = await User.findOne({ clerkId: userId });
     if (!currentUser) {
       return NextResponse.json({ success: false, error: "User profile not found." }, { status: 404 });
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: "Forbidden: Only instructors can create assignments." }, { status: 403 });
     }
 
-    // Verify ownership/identity
+    
     if (currentUser._id.toString() !== uploadedBy) {
       return NextResponse.json({ success: false, error: "Forbidden: Instructor ID mismatch." }, { status: 403 });
     }

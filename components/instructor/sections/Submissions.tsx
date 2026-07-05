@@ -123,7 +123,7 @@ const Submissions = () => {
     <div className="p-4 bg-white dark:bg-gray-800 rounded shadow-md">
       <h2 className="text-xl font-bold mb-4 text-gray-800 dark:text-white">Submissions</h2>
 
-      {/* Filters */}
+      {}
       <div className="flex flex-wrap gap-4 mb-4">
         <select
           value={filters.course}
@@ -157,7 +157,7 @@ const Submissions = () => {
         </select>
       </div>
 
-      {/* Table */}
+      {}
       <table className="w-full text-left border-collapse">
         <thead>
           <tr className="bg-gray-100 dark:bg-gray-700 text-sm text-gray-600 dark:text-gray-300">
@@ -232,7 +232,7 @@ const Submissions = () => {
         </tbody>
       </table>
 
-      {/* Preview Section */}
+      {}
       {selectedSubmission && (
         <div className="mt-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-md">
           <div className="flex justify-between items-center mb-2">

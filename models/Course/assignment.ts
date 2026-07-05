@@ -20,7 +20,7 @@ const AssignmentSchema = new Schema(
       enum: ["file", "text"],
       required: true,
     },
-    // File-based assignment
+    
     fileUrl: {
       type: String,
     },
@@ -30,11 +30,11 @@ const AssignmentSchema = new Schema(
     fileType: {
       type: String,
     },
-    // Text-based assignment
+    
     textContent: {
       type: String,
     },
-    // Uploaded by Instructor (not students)
+    
     uploadedBy: {
       type: Schema.Types.ObjectId,
       ref: "User",

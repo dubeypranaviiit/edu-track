@@ -17,7 +17,7 @@ export async function PATCH(
     }
 
     const { id } = await params;
-    const { status } = await req.json(); // "approved" | "rejected"
+    const { status } = await req.json(); 
 
     if (!status || !["approved", "rejected"].includes(status)) {
       return NextResponse.json({ error: "Invalid status specified" }, { status: 400 });
@@ -38,7 +38,7 @@ export async function PATCH(
 
     await targetUser.save();
 
-    // Log admin action
+    
     await AdminAction.create({
       admin: authResult.user._id,
       action: status === "approved" ? "approve_instructor" : "reject_instructor",

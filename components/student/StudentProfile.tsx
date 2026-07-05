@@ -11,7 +11,7 @@ export default function StudentProfile() {
   const { profile, loading, fetchProfile, updateProfile, setProfile } = useUserStore();
   const [editMode, setEditMode] = useState(false);
 
-  // Fetch profile only once if clerkId exists
+  
   useEffect(() => {
     if (!isLoaded || !isSignedIn || !user?.id) return;
     if (!profile || profile.clerkId !== user.id) {
@@ -23,7 +23,7 @@ export default function StudentProfile() {
   if (!profile) return <div className="text-center mt-20 text-gray-600">No profile found.</div>;
 
   const handleChange = (field: keyof typeof profile, value: any) => {
-    // Live update in Zustand store
+    
     setProfile({ ...profile, [field]: value });
   };
 
@@ -37,8 +37,18 @@ export default function StudentProfile() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    await updateProfile(profile); // Sync changes with backend
+    await updateProfile(profile); 
     setEditMode(false);
+  };
+
+  const handleApplyInstructor = async () => {
+    try {
+      await updateProfile({ instructorStatus: "pending" });
+      alert("Application submitted! An admin will review your request.");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to submit request.");
+    }
   };
 
   return (
@@ -46,7 +56,7 @@ export default function StudentProfile() {
       <div className="min-h-screen flex justify-center items-start py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-indigo-100 bg-white">
         <div className="w-full max-w-5xl backdrop-blur-xl border-gray-200 bg-white rounded-2xl shadow-2xl p-8 sm:p-10 transition-all duration-300">
           
-          {/* Header */}
+          {}
           <div className="flex flex-col md:flex-row items-center md:items-start gap-8 mb-8">
             <div className="relative group w-32 h-32 rounded-full overflow-hidden ring-4 ring-blue-500/30 shadow-md transition-all duration-300">
               <Image
@@ -64,6 +74,46 @@ export default function StudentProfile() {
             <div className="flex-1 text-center md:text-left">
               <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">{profile.name || "Unnamed User"}</h1>
               <p className="text-gray-600 dark:text-gray-400">{profile.email || "No email"}</p>
+              
+              <div className="mt-2 flex flex-wrap items-center justify-center md:justify-start gap-2">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700 capitalize">
+                  Role: {profile.role || "student"}
+                </span>
+                
+                {profile.role === "student" && (
+                  <>
+                    {(profile.instructorStatus === "none" || !profile.instructorStatus) && (
+                      <button
+                        type="button"
+                        onClick={handleApplyInstructor}
+                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400 border-blue-200 dark:border-blue-800 transition-colors cursor-pointer"
+                      >
+                        Apply to become an Instructor
+                      </button>
+                    )}
+                    {profile.instructorStatus === "pending" && (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400 border-amber-200 dark:border-amber-800">
+                        Instructor Request: Pending Review
+                      </span>
+                    )}
+                    {profile.instructorStatus === "rejected" && (
+                      <div className="flex items-center gap-2">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border bg-rose-100 dark:bg-rose-900/30 text-rose-800 dark:text-rose-400 border-rose-200 dark:border-rose-800">
+                          Instructor Request: Rejected
+                        </span>
+                        <button
+                          type="button"
+                          onClick={handleApplyInstructor}
+                          className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400 border-blue-200 dark:border-blue-800 transition-colors cursor-pointer"
+                        >
+                          Reapply
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+
               <button
                 onClick={() => setEditMode(!editMode)}
                 className="mt-4 inline-flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 font-medium hover:underline"
@@ -73,7 +123,7 @@ export default function StudentProfile() {
             </div>
           </div>
 
-          {/* Form */}
+          {}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
@@ -107,7 +157,7 @@ export default function StudentProfile() {
               />
             </div>
 
-            {/* Social Links */}
+            {}
             <div>
               <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">🌐 Social Links</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

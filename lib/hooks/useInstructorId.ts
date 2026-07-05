@@ -11,7 +11,7 @@ export default function useInstructorId() {
     const fetchMongoId = async () => {
       try {
         const res = await axios.get(`/api/users/${profile.clerkId}`);
-        setInstructorId(res.data._id); // Mongo ObjectId
+        setInstructorId(res.data._id); 
       } catch (err) {
         console.error("Error fetching instructor Mongo ID", err);
       }

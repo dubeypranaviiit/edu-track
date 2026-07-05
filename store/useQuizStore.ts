@@ -17,20 +17,20 @@ interface QuizState {
   passingMarks: number;
   questions: QuestionInput[];
 
-  // setters
+  
   setTitle: (val: string) => void;
   setDescription: (val: string) => void;
   setDuration: (val: number) => void;
   setMaxAttempts: (val: number) => void;
   setPassingMarks: (val: number) => void;
 
-  // question actions
+  
   addQuestion: (q?: QuestionInput) => void;
   removeQuestion: (index: number) => void;
   updateQuestion: (index: number, field: keyof QuestionInput, value: any) => void;
   updateOption: (qIndex: number, oIndex: number, value: string) => void;
 
-  // reset
+  
   resetQuiz: () => void;
 }
 

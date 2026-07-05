@@ -88,7 +88,7 @@ export function DataTable<T>({
 
   return (
     <div className="space-y-4">
-      {/* Search Input */}
+      {}
       {(searchKey || onSearchChange) && (
         <div className="relative max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 size-4" />
@@ -101,7 +101,7 @@ export function DataTable<T>({
         </div>
       )}
 
-      {/* Table Card */}
+      {}
       <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-sm">
@@ -165,7 +165,7 @@ export function DataTable<T>({
           </table>
         </div>
 
-        {/* Pagination Footer */}
+        {}
         {serverSide && totalPages > 1 && onPageChange && (
           <div className="p-4 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
             <span className="text-xs text-slate-500 dark:text-slate-400">

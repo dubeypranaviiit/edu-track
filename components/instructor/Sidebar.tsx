@@ -31,9 +31,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     >
       <div className="p-4 flex justify-between items-center">
         <h1 className={`${isOpen ? "block" : "hidden"} text-xl font-bold text-blue-700 dark:text-white`}>
-    {/* <Link href="/" className="cursor-pointer text-black">
-         InstructorProfile
-    </Link> */}
+    {}
   </h1>
         <button
           onClick={toggleSidebar}

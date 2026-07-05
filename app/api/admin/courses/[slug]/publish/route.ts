@@ -31,7 +31,7 @@ export async function PATCH(
     course.isPublished = isPublished;
     await course.save();
 
-    // Log admin action
+    
     await AdminAction.create({
       admin: authResult.user._id,
       action: isPublished ? "publish_course" : "unpublish_course",

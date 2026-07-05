@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { redirect } from "next/navigation";
 
-// Prevent caching for real-time stats
+
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
@@ -22,7 +22,7 @@ export default async function AdminDashboardPage() {
     redirect("/");
   }
 
-  // Fetch Stats
+  
   const totalUsers = await User.countDocuments();
   const totalCourses = await Course.countDocuments();
   const pendingRequests = await User.countDocuments({ instructorStatus: "pending" });
@@ -33,7 +33,7 @@ export default async function AdminDashboardPage() {
   ]);
   const totalRevenue = revenueResult[0]?.total || 0;
 
-  // Recent Admin Actions
+  
   const recentActions = await AdminAction.find()
     .populate("admin", "name email")
     .sort({ createdAt: -1 })
@@ -48,13 +48,13 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="space-y-8">
-      {/* Header */}
+      {}
       <div>
         <h1 className="text-3xl font-extrabold tracking-tight">Overview</h1>
         <p className="text-slate-500 dark:text-slate-400 mt-2">Welcome to your EduTrack Admin Dashboard.</p>
       </div>
 
-      {/* Stats Cards */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, idx) => {
           const Icon = stat.icon;
@@ -72,7 +72,7 @@ export default async function AdminDashboardPage() {
         })}
       </div>
 
-      {/* Audit Log / Recent Actions */}
+      {}
       <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 shadow-xs space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold">Recent Admin Actions</h2>
