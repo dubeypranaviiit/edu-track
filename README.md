@@ -1,113 +1,124 @@
-# 🎓 EduTrack – Learning Management System (LMS)
+# 🎓 EduTrack — Modern Learning Management & Assessment System
 
-EduTrack is a **full-stack Learning Management System (LMS)** built using **Next.js 15, React, TypeScript, and MongoDB**, designed to simulate a real-world EdTech platform.  
-It supports **students, instructors**, and is built with scalability in mind for future **admin features**.
-
-This project focuses on **real product workflows**, clean UI/UX, and production-grade architecture.
+EduTrack is a premium, full-stack Learning Management System (LMS) built with **Next.js 15, React 18, TypeScript, Mongoose, and MongoDB**. Engineered with real product workflows, it supports a rich, roles-based architecture (Students, Instructors, Admins), integrated Stripe payments, secure Clerk authentication, and an advanced automated quiz/assessment engine.
 
 ---
 
+## 🖥️ UI Dashboard Preview
+
+![EduTrack UI Mockup](public/assets/edutrack_mockup.png)
 
 ---
 
-## 🧩 Key Features
+## 🛠️ Tech Stack & Services
 
-### 👨‍🎓 Student Features
-- Browse and search courses
-- View course details with pricing & discounts
-- Enroll in courses
-- Watch video lectures (streaming support)
-- Attempt free tests & quizzes
-- Submit assignments
-- Track enrolled courses
-- Dashboard for learning progress
+*   **Framework**: Next.js 15 (App Router), React 18, TypeScript
+*   **Styling**: Vanilla CSS & Tailwind CSS for maximum responsiveness
+*   **Database**: MongoDB with Mongoose ODM (fully relational populates)
+*   **Authentication**: Clerk Auth (Server & Client sync)
+*   **Payments**: Stripe (Secure Checkout Sessions & Webhooks integration)
+*   **Media Storage**: Cloudinary (Image & media uploads)
+*   **State Management**: Zustand
 
 ---
 
-### 👨‍🏫 Instructor Features
-- Instructor dashboard
-- Create, edit, publish & unpublish courses
-- Upload course thumbnails & logos
-- Set pricing, discounts & certificates
-- Create quizzes/tests with MCQs
-- Manage tests (publish/unpublish)
-- Create assignments (text-based)
-- View student submissions
-- Grade or reject submissions with feedback
+## ⚙️ Quick Start & Local Setup
+
+### 1. Clone & Install Dependencies
+```bash
+git clone https://github.com/dubeypranaviiit/edu-track.git
+cd edu-track
+npm install
+```
+
+### 2. Configure Environment Variables
+Copy the template `.env.example` file to create your local variables configuration:
+```bash
+cp .env.example .env.local
+```
+Fill in the credentials in `.env.local` for the following:
+*   **Clerk**: Setup Clerk Application keys, Webhook Secret (for user updates).
+*   **MongoDB**: Connection URI string (local or Mongo Atlas).
+*   **Stripe**: API keys and Webhook signing secret.
+*   **Cloudinary**: Cloud name, API Key, and Secret.
+
+### 3. Run Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) to view the app.
 
 ---
 
-### 🔐 Authentication & Payments
-- Secure authentication using **Clerk**
-- Role-based access (Student / Instructor)
-- Stripe integration for payments (ready for production)
+## 🏗️ Architecture & Data Flow Diagram
+
+```mermaid
+flowchart TD
+    subgraph Client Roles
+        Student["👨‍🎓 Student"]
+        Instructor["👨‍🏫 Instructor"]
+        Admin["👑 Admin"]
+    end
+
+    subgraph Authentication & Gateway
+        Clerk["🔐 Clerk Auth"]
+    end
+
+    subgraph Platform Services
+        NextJS["🚀 Next.js API Routes"]
+        Stripe["💳 Stripe API"]
+        Cloudinary["📁 Cloudinary API"]
+    end
+
+    subgraph Data Layer
+        MongoDB[("🍃 MongoDB / Mongoose")]
+    end
+
+    %% Flows
+    Student -->|1. Authenticates| Clerk
+    Instructor -->|1. Authenticates| Clerk
+    Admin -->|1. Authenticates| Clerk
+
+    Student -->|2. Stripe Checkout Request| NextJS
+    NextJS -->|3. Initiates Session| Stripe
+    Stripe -->|4. Webhook Confirmation| NextJS
+    NextJS -->|5. Grants Course Enrollment| MongoDB
+
+    Instructor -->|Uploads Course Assets| NextJS
+    NextJS -->|Streams Media| Cloudinary
+    NextJS -->|Persists Chapters & Items| MongoDB
+
+    Admin -->|Toggles Instructor Vacancies| MongoDB
+    Student -->|Applies to teach (If Vacancy Open)| NextJS
+    Admin -->|Approves Applications| NextJS
+    NextJS -->|Promotes Role to Instructor| MongoDB
+```
 
 ---
 
-## 🛠 Tech Stack
+## 🧩 Core Platform Workflows
 
-### Frontend
-- **Next.js 15 (App Router)**
-- **React 18**
-- **TypeScript**
-- **Tailwind CSS**
-- **Radix UI**
-- **Framer Motion**
-- **Swiper**
-- **Zustand (State Management)**
+### 1. Student Course Access & Learning
+*   Secure browse/search, course landing pages with price discounts.
+*   Secure course checkout via Stripe.
+*   Learning dashboard supporting chapter-subtopic progression, video lecture streaming, and text readings.
+*   Real-time grading list & analytics.
 
-### Backend
-- **MongoDB**
-- **Mongoose**
-- **Next.js API Routes**
+### 2. Instructor Authoring Suite
+*   Course builder interface with dynamic chapters, subtopics, and nested item uploads.
+*   Interactive quiz creation utilizing **percentage-based passing criteria** (auto-adjusts required score relative to question point edits).
+*   Student quiz submission analysis, text-based assignments review, and grading feedback workspace.
 
-### Media & Utilities
-- **Cloudinary** – media uploads
-- **HLS.js** – video streaming
-- **Multer / Formidable** – file handling
-- **Slugify** – SEO-friendly URLs
-- **React Hook Form** – form handling
-
-### Auth & Payments
-- **Clerk**
-- **Stripe**
-
----
-
-
-
-
-
-
-
----
-
-## 🧪 Future Enhancements
-- Admin panel
-- Course progress tracking
-- Certificate generation (PDF)
-- Analytics dashboard
-- Instructor approval workflow
-- Notifications system
-
----
-
-## 🧑‍🎓 About the Developer
-
-**Pranav Abhimanyu**  
-3rd Year Engineering Student  
-Passionate about full-stack development and scalable web applications.
-
-> This project was built to gain real-world product experience beyond tutorial-based learning.
+### 3. Admin Control Panel
+*   Comprehensive statistics and analytics dashboard.
+*   User account suspension (interferes user actions globally via middleware checks).
+*   Verification and approval pipeline for pending instructor requests.
+*   **Site Settings Vacancy Switcher**: Toggles student instructor application eligibility in real-time.
 
 ---
 
 ## 📜 License
-This project is for educational purposes.  
-Feel free to fork and explore.
+Built for educational and product demonstration purposes. 
 
----
-
-## ⭐ Acknowledgements
-- Next.js & React Community
-- Open-source libraries used in this project
+**Developed by Pranav Abhimanyu**
+Third-year engineering student passionate about building highly scalable systems and real-world UI products.
