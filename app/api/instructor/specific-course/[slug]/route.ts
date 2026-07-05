@@ -3,11 +3,15 @@ import { connectDB } from "@/lib/mongoose";
 import User from "@/models/user";
 import Enrollment from "@/models/enrollment.model";
 import Course from "@/models/Course/course";
+import { requireRole } from "@/lib/auth/requireRole";
 
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
+  const authResult = await requireRole(["instructor", "admin"]);
+  if ("error" in authResult) return NextResponse.json({ error: authResult.error }, { status: authResult.status });
+
   await connectDB();
 
   const { slug } = await params;

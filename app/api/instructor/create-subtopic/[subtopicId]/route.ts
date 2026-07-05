@@ -1,11 +1,15 @@
 import { connectDB } from "@/lib/mongoose";
 import Subtopic from "@/models/Course/subTopic";
 import { NextRequest, NextResponse } from "next/server";
+import { requireRole } from "@/lib/auth/requireRole";
 
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ subtopicId: string }> }
 ) {
+  const authResult = await requireRole(["instructor", "admin"]);
+  if ("error" in authResult) return NextResponse.json({ error: authResult.error }, { status: authResult.status });
+
   const { subtopicId } = await params;
   const { title } = await req.json();
 
@@ -25,6 +29,9 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ subtopicId: string }> }
 ) {
+  const authResult = await requireRole(["instructor", "admin"]);
+  if ("error" in authResult) return NextResponse.json({ error: authResult.error }, { status: authResult.status });
+
   const { subtopicId } = await params;
 
   try {

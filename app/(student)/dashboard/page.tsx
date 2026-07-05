@@ -8,6 +8,7 @@ import CourseDashboard from "@/components/course/CourseDashboard";
 import StudentProfile from "@/components/student/StudentProfile";
 import EnrolledCourse from "@/components/course/enrolled/EnrolledCourse";
 import ResultsPage from "@/app/(student)/results/page";
+import InstructorApplyBanner from "@/components/student/InstructorApplyBanner";
 
 const navItems = [
   { id: "courses", icon: FiHome, label: "Courses" },
@@ -36,6 +37,7 @@ const DashboardPage = () => {
         <div className="flex-1 h-screen flex flex-col">
           {}
           <main className="p-4 overflow-auto flex-1">
+            <InstructorApplyBanner />
             {activeSection === "courses" && <CourseDashboard />}
             {activeSection === "enrolled" && <EnrolledCourse />}
             {activeSection === "results" && <ResultsPage />}

@@ -21,11 +21,13 @@ export default function AdminInstructorsPage() {
   const [requests, setRequests] = useState<RequestType[]>([]);
   const [loading, setLoading] = useState(true);
 
-  
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState<RequestType | null>(null);
   const [actionType, setActionType] = useState<"approve" | "reject" | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
+
+  const [vacancyOpen, setVacancyOpen] = useState(false);
+  const [vacancyLoading, setVacancyLoading] = useState(false);
 
   const fetchRequests = async () => {
     try {
@@ -42,7 +44,23 @@ export default function AdminInstructorsPage() {
 
   useEffect(() => {
     fetchRequests();
+    axios.get("/api/admin/vacancy").then((res) => {
+      setVacancyOpen(res.data.vacancyOpen);
+    });
   }, []);
+
+  const toggleVacancy = async () => {
+    setVacancyLoading(true);
+    try {
+      const res = await axios.patch("/api/admin/vacancy", { open: !vacancyOpen });
+      setVacancyOpen(res.data.vacancyOpen);
+      toast.success(`Instructor vacancy ${res.data.vacancyOpen ? "opened" : "closed"}`);
+    } catch {
+      toast.error("Failed to update vacancy");
+    } finally {
+      setVacancyLoading(false);
+    }
+  };
 
   const handleAction = async () => {
     if (!selectedRequest || !actionType) return;
@@ -116,9 +134,36 @@ export default function AdminInstructorsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Instructor Requests</h1>
-        <p className="text-sm text-slate-500 font-medium">Approve or reject pending instructor applications.</p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Instructor Requests</h1>
+          <p className="text-sm text-slate-500 font-medium">Approve or reject pending instructor applications.</p>
+        </div>
+
+        <div className="flex items-center gap-3 bg-white border rounded-xl px-4 py-3 shadow-sm">
+          <div>
+            <p className="text-sm font-semibold text-gray-800">Instructor Vacancy</p>
+            <p className="text-xs text-gray-400">
+              {vacancyOpen ? "Apply button visible to students" : "Apply button hidden from students"}
+            </p>
+          </div>
+          <button
+            onClick={toggleVacancy}
+            disabled={vacancyLoading}
+            className={`relative w-12 h-6 rounded-full transition-colors duration-200 focus:outline-none disabled:opacity-50 cursor-pointer ${
+              vacancyOpen ? "bg-green-500" : "bg-gray-300"
+            }`}
+          >
+            <span
+              className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200 ${
+                vacancyOpen ? "translate-x-6" : "translate-x-0"
+              }`}
+            />
+          </button>
+          <span className={`text-xs font-medium ${vacancyOpen ? "text-green-600" : "text-gray-400"}`}>
+            {vacancyLoading ? "..." : vacancyOpen ? "OPEN" : "CLOSED"}
+          </span>
+        </div>
       </div>
 
       <DataTable
