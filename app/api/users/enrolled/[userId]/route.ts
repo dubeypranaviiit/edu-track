@@ -2,6 +2,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import Enrollment from "@/models/enrollment.model";
 import Course from "@/models/Course/course";
+import Chapter from "@/models/Course/chapter";
+import Subtopic from "@/models/Course/subTopic";
+import Item from "@/models/Course/item";
 import { connectDB } from "@/lib/mongoose";
 
 export async function GET(

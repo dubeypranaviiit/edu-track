@@ -1,8 +1,9 @@
 
 import { NextResponse, NextRequest } from "next/server";
+import Course from "@/models/Course/course";
+import Chapter from "@/models/Course/chapter";
 import Subtopic from "@/models/Course/subTopic";
 import Item from "@/models/Course/item";
-import Course from "@/models/Course/course";
 import User from "@/models/user";
 import Enrollment from "@/models/enrollment.model";
 import { connectDB } from "@/lib/mongoose";

@@ -3,6 +3,9 @@ import { connectDB } from "@/lib/mongoose";
 import User from "@/models/user";
 import Enrollment from "@/models/enrollment.model";
 import Course from "@/models/Course/course";
+import Chapter from "@/models/Course/chapter";
+import Subtopic from "@/models/Course/subTopic";
+import Item from "@/models/Course/item";
 import { requireRole } from "@/lib/auth/requireRole";
 
 export async function GET(

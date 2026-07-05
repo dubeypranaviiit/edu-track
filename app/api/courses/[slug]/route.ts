@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongoose";
 import Course from "@/models/Course/course";
+import Chapter from "@/models/Course/chapter";
+import Subtopic from "@/models/Course/subTopic";
+import Item from "@/models/Course/item";
 
 export async function GET(
   req: NextRequest,
