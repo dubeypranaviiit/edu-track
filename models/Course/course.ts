@@ -1,7 +1,7 @@
 import { Schema, model, models } from "mongoose";
-import "./chapter";
-import "./subTopic";
-import "./item";
+import "@/models/Course/chapter";
+import "@/models/Course/subTopic";
+import "@/models/Course/item";
 
 const CourseSchema = new Schema(
   {

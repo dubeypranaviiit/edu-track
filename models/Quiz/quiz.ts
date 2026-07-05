@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
-import "./question";
+import "@/models/Quiz/question";
 
 export interface QuizDocument extends Document {
   title: string;
