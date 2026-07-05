@@ -64,9 +64,9 @@ export const useFetchCourseStore = create<CourseStore>((set, get) => ({
 
     set({ loadingCourses: true, errorCourses: null });
     try {
-      const res = await axios.get("/api/instructor/create-course");
+      const res = await axios.get("/api/courses");
       const data = res.data;
-      const coursesArray = Array.isArray(data) ? data : data.courses;
+      const coursesArray = Array.isArray(data) ? data : (data.courses || []);
       const published = coursesArray.filter((c: Course) => c.isPublished);
       set({ courses: published, loadingCourses: false, lastFetchedCourses: Date.now() });
     } catch (err: any) {
