@@ -16,10 +16,18 @@ import { UserButton, SignInButton, SignUpButton, useUser } from "@clerk/nextjs";
 const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [showDemo, setShowDemo] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState("");
 
   const { isLoaded, isSignedIn } = useUser();
   const { profile } = useUserStore(); 
   const role = profile?.role ?? "student"; 
+
+  const handleCopy = (text: string, label: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedEmail(label);
+    setTimeout(() => setCopiedEmail(""), 2000);
+  };
 
   const renderLinks = () => {
     const links = [
@@ -101,7 +109,13 @@ const Header: React.FC = () => {
             ) : isSignedIn ? (
               <UserButton afterSignOutUrl="/" />
             ) : (
-              <div className="flex gap-4">
+              <div className="flex gap-3 items-center">
+                <button
+                  onClick={() => setShowDemo(true)}
+                  className="border border-purple-500 text-purple-600 px-4 py-2 rounded-lg hover:bg-purple-50 transition cursor-pointer text-sm font-medium"
+                >
+                  🎯 Demo
+                </button>
                 <SignInButton mode="modal">
                   <button className="bg-blue-600 text-white px-4 py-2 rounded-lg cursor-pointer">
                     Login
@@ -173,6 +187,12 @@ const Header: React.FC = () => {
             <UserButton afterSignOutUrl="/" />
           ) : (
             <div className="space-y-2 cursor-pointer">
+              <button
+                onClick={() => { setShowDemo(true); setMenuOpen(false); }}
+                className="w-full border border-purple-500 text-purple-600 py-2 rounded-lg hover:bg-purple-50 transition font-medium cursor-pointer"
+              >
+                🎯 Demo Access
+              </button>
               <SignInButton mode="modal">
                 <button className="w-full bg-blue-600 text-white py-2 rounded-lg cursor-pointer">
                   Login
@@ -187,6 +207,116 @@ const Header: React.FC = () => {
           )}
         </motion.nav>
       </div>
+
+      {showDemo && (
+        <div
+          className="fixed inset-0 z-[999] flex items-center justify-center bg-black/60 px-4"
+          onClick={() => setShowDemo(false)}
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl w-full max-w-md"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-6 py-4 border-b">
+              <div>
+                <h2 className="text-lg font-bold text-gray-800">🎯 Demo Access</h2>
+                <p className="text-xs text-gray-400 mt-0.5">
+                  Use these credentials to explore the app
+                </p>
+              </div>
+              <button
+                onClick={() => setShowDemo(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition text-lg cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="p-5 space-y-3">
+              <div className="border border-blue-200 bg-blue-50 rounded-xl p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-0.5 rounded-full uppercase">
+                        Student
+                      </span>
+                    </div>
+                    <p className="text-sm font-mono text-gray-700 truncate">
+                      student.demo@yopmail.com
+                    </p>
+                    <p className="text-sm font-mono text-gray-500 mt-0.5">
+                      EduTrack@123
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleCopy("student.demo@yopmail.com", "student")}
+                    className="flex-shrink-0 px-3 py-1.5 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition cursor-pointer"
+                  >
+                    {copiedEmail === "student" ? "✓ Copied" : "Copy Email"}
+                  </button>
+                </div>
+              </div>
+
+              <div className="border border-green-200 bg-green-50 rounded-xl p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs font-bold text-green-600 bg-green-100 px-2 py-0.5 rounded-full uppercase">
+                        Instructor
+                      </span>
+                    </div>
+                    <p className="text-sm font-mono text-gray-700 truncate">
+                      instructor.demo@mailinator.com
+                    </p>
+                    <p className="text-sm font-mono text-gray-500 mt-0.5">
+                      EduTrack@123
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleCopy("instructor.demo@mailinator.com", "instructor")}
+                    className="flex-shrink-0 px-3 py-1.5 bg-green-600 text-white text-xs rounded-lg hover:bg-green-700 transition cursor-pointer"
+                  >
+                    {copiedEmail === "instructor" ? "✓ Copied" : "Copy Email"}
+                  </button>
+                </div>
+              </div>
+
+              <div className="border border-purple-200 bg-purple-50 rounded-xl p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs font-bold text-purple-600 bg-purple-100 px-2 py-0.5 rounded-full uppercase">
+                        Admin
+                      </span>
+                    </div>
+                    <p className="text-sm font-mono text-gray-700 truncate">
+                      admin.demo@mailinator.com
+                    </p>
+                    <p className="text-sm font-mono text-gray-500 mt-0.5">
+                      EduTrack@123
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleCopy("admin.demo@mailinator.com", "admin")}
+                    className="flex-shrink-0 px-3 py-1.5 bg-purple-600 text-white text-xs rounded-lg hover:bg-purple-700 transition cursor-pointer"
+                  >
+                    {copiedEmail === "admin" ? "✓ Copied" : "Copy Email"}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="px-5 pb-5">
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 text-center">
+                <p className="text-xs text-gray-500">
+                  Click <strong>Login</strong> → Enter email + password →{" "}
+                  <strong>Sign in with email</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
